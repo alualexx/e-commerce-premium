@@ -103,4 +103,77 @@ const getUserStats = async (req, res, next) => {
   }
 };
 
-module.exports = { getUsers, getUserById, updateUser, deleteUser, getUserStats };
+// @desc    Update current user's location (Delivery)
+// @route   PUT /api/users/me/location
+const updateMyLocation = async (req, res, next) => {
+  try {
+    const { lat, lng } = req.body;
+    if (lat === undefined || lng === undefined) {
+      res.status(400);
+      throw new Error('Latitude and Longitude are required');
+    }
+
+    const user = await User.findById(req.user._id);
+    user.currentLocation = {
+      lat,
+      lng,
+      updatedAt: new Date()
+    };
+
+    await user.save();
+    res.json({ message: 'Location updated' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get all delivery locations (Admin)
+// @route   GET /api/users/delivery/locations
+const getDeliveryLocations = async (req, res, next) => {
+  try {
+    const Order = require('../models/Order');
+
+    const deliveryPersonnel = await User.find({ 
+      role: 'delivery',
+      'currentLocation.updatedAt': { $exists: true }
+    }).select('name email phone currentLocation');
+
+    // Attach active order info for each person
+    const enriched = await Promise.all(
+      deliveryPersonnel.map(async (person) => {
+        const activeOrders = await Order.find({
+          deliveryPerson: person._id,
+          status: { $in: ['shipped', 'out_for_delivery', 'processing', 'confirmed'] }
+        })
+        .select('trackingNumber status items shippingAddress totalPrice paymentMethod createdAt')
+        .populate('user', 'name email phone');
+
+        const completedCount = await Order.countDocuments({
+          deliveryPerson: person._id,
+          status: 'delivered'
+        });
+
+        return {
+          ...person.toObject(),
+          activeOrdersCount: activeOrders.length,
+          activeOrders: activeOrders, // Full list of active orders
+          completedOrders: completedCount
+        };
+      })
+    );
+
+    res.json(enriched);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { 
+  getUsers, 
+  getUserById, 
+  updateUser, 
+  deleteUser, 
+  getUserStats,
+  updateMyLocation,
+  getDeliveryLocations
+};

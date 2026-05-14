@@ -1,0 +1,621 @@
+{
+  "nav": {
+    "shop": "Shop",
+    "cart": "Cart",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "about": "About",
+    "contact": "Contact",
+    "orders": "My Orders",
+    "profile": "Profile"
+  },
+  "orders": {
+    "status": {
+      "pending": "Pending",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "out_for_delivery": "Out for Delivery",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    }
+  },
+  "common": {
+    "home": "Home",
+    "add_to_cart": "Add to Cart",
+    "loading": "Preparing your experience...",
+    "error": "An unexpected error occurred",
+    "retry": "Try Again",
+    "view_all": "View All",
+    "shop_now": "Shop Now",
+    "cancel": "Cancel",
+    "save": "Save Changes",
+    "publish": "Publish",
+    "search": "Search...",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View Details",
+    "no_results": "No results found",
+    "refresh": "Refresh"
+  },
+  "shop": {
+    "catalog": "Catalog",
+    "title_default": "The Collection",
+    "description": "Explore our curated selection of premium minimalist essentials, designed for the modern individual who values quality and simplicity.",
+    "filters": "Filters",
+    "units_available": "Units Available",
+    "search_placeholder": "Search collection...",
+    "categories": "Categories",
+    "clear": "Clear",
+    "all_collections": "All Collections",
+    "sort": {
+      "newest": "Newest First",
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "rating": "Highest Rated"
+    },
+    "promo": {
+      "title": "Join the Circle",
+      "description": "Get early access to exclusive drops and premium member-only pricing.",
+      "button": "Join Now"
+    },
+    "empty": {
+      "title": "No results found",
+      "description": "We couldn't find any products matching your current filters. Try a different search or clear your filters.",
+      "button": "Reset All Filters"
+    }
+  },
+  "home": {
+    "hero": {
+      "slides": [
+        {
+          "subtitle": "Spring Summer 2026",
+          "title": "Minimalist Essence.",
+          "description": "Discover our new seasonal collection where premium craftsmanship meets contemporary minimalist philosophy.",
+          "cta": "Shop Collection"
+        },
+        {
+          "subtitle": "Premium Essentials",
+          "title": "Curated for the Modern Life.",
+          "description": "Elevate your daily routine with pieces designed to last, using the world's finest sustainable materials.",
+          "cta": "Explore Now"
+        }
+      ],
+      "branding": "ESTABLISHED MMXXVI — ALEX RETAIL"
+    },
+    "trust": {
+      "shipping": {
+        "title": "Global Shipping",
+        "desc": "Premium doorstep delivery"
+      },
+      "secure": {
+        "title": "Secure Checkout",
+        "desc": "100% encrypted payments"
+      },
+      "support": {
+        "title": "Concierge Support",
+        "desc": "24/7 Premium assistance"
+      },
+      "returns": {
+        "title": "Easy Returns",
+        "desc": "30-day effortless returns"
+      }
+    },
+    "categories": {
+      "explore": "Explore Collections",
+      "title": "Shop by Category",
+      "tags": {
+        "featured": "Featured",
+        "new": "New Arrival",
+        "sale": "Seasonal Sale"
+      }
+    },
+    "featured": {
+      "title": "Featured Collections",
+      "subtitle": "Curated Selection",
+      "empty": "No featured products yet.",
+      "browse": "Browse all products"
+    },
+    "story": {
+      "subtitle": "Our Story",
+      "title": "Conscious Style.",
+      "title_italic": "Simply Delivered.",
+      "description": "ALEX RETAIL was founded on the belief that great design and ethical sourcing can coexist. Every piece in our collection is curated with intention — for you and the planet.",
+      "cta": "Explore the Mission"
+    },
+    "newsletter": {
+      "subtitle": "Newsletter",
+      "title": "Join the Inner Circle",
+      "description": "Subscribe to receive early access to new releases, exclusive editorial content, and members-only events.",
+      "placeholder": "Enter your email address",
+      "button": "Subscribe",
+      "spam_note": "We respect your privacy. Unsubscribe at any time."
+    },
+    "promotion": {
+      "exclusive": "Exclusive Release",
+      "limited": "Limited Availability",
+      "shop_now": "Shop the Sale",
+      "ending": "Ending Soon",
+      "pricing": "Special Pricing",
+      "active": "OFFER ACTIVE",
+      "live": "Now Live"
+    }
+  },
+  "profile": {
+    "title": "Edit Profile",
+    "description": "Manage your personal information and how it appears on the platform.",
+    "labels": {
+      "name": "Full Name",
+      "email": "Email Address"
+    },
+    "placeholders": {
+      "name": "Your name",
+      "email": "email@example.com"
+    },
+    "email_note": "Email cannot be changed for security reasons.",
+    "privacy_note": "Your data is protected by industry-standard encryption. We never share your personal information with third parties without your explicit consent.",
+    "button": {
+      "save": "Save Changes"
+    },
+    "messages": {
+      "success": "Profile updated successfully",
+      "error": "Failed to update profile"
+    }
+  },
+  "cart": {
+    "title": "Shopping Bag",
+    "item": "Item",
+    "items": "Items",
+    "selected": "Selected",
+    "remove": "Remove",
+    "clear_all": "Clear Entire Bag",
+    "empty": {
+      "title": "Your bag is empty",
+      "description": "Discover our latest collection of premium minimalist essentials and start building your wardrobe.",
+      "button": "Start Shopping"
+    },
+    "summary": {
+      "title": "Summary",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "free": "Free",
+      "total": "Total",
+      "checkout": "Checkout Now",
+      "continue": "Continue Shopping",
+      "security_note": "Secure transaction powered by industry standard encryption."
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "no_items": {
+      "title": "No items for checkout",
+      "description": "Your shopping bag is empty. Add some products before proceeding to checkout.",
+      "button": "Back to Collections"
+    },
+    "steps": {
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "review": "Review"
+    },
+    "shipping": {
+      "title": "Shipping Details",
+      "full_name": {
+        "label": "Full Name",
+        "placeholder": "Enter your full name"
+      },
+      "address": {
+        "label": "Street Address",
+        "placeholder": "Building, Street, Area"
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "e.g. Addis Ababa"
+      },
+      "phone": {
+        "label": "Phone Number",
+        "placeholder": "+251 ..."
+      }
+    },
+    "payment": {
+      "title": "Payment Method",
+      "note": "Note: Cash on Delivery is unavailable for orders exceeding 5,000 ETB.",
+      "providers": {
+        "telebirr": "Telebirr",
+        "telebirr_desc": "Secure Mobile Payment",
+        "cbe_birr": "CBE Birr",
+        "cbe_birr_desc": "Direct Bank Transfer",
+        "abyssinia": "Bank of Abyssinia",
+        "abyssinia_desc": "Apollo Digital Bank",
+        "chapa": "Chapa Online",
+        "chapa_desc": "Online Payment Gateway",
+        "cash_on_delivery": "Cash on Delivery",
+        "cash_on_delivery_desc": "Pay upon arrival"
+      }
+    },
+    "review": {
+      "title": "Review Order",
+      "shipping_to": "Shipping To",
+      "payment_method": "Payment Method",
+      "safe_secure": "Safe & Secure Transaction",
+      "verified": "Verified"
+    },
+    "summary": {
+      "title": "Order Summary",
+      "selection": "Your Selection",
+      "qty": "Qty",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "tax": "Estimated Tax",
+      "total": "Total",
+      "security": "Encrypted payment processing for your security."
+    },
+    "actions": {
+      "back": "Back",
+      "continue": "Continue",
+      "processing": "Processing...",
+      "complete": "Complete Order"
+    },
+    "validation": {
+      "name_required": "Full name is required for delivery",
+      "address_required": "Street address is required",
+      "city_required": "City is required",
+      "phone_invalid": "Invalid Ethiopian contact (+251...)",
+      "cod_limit": "Cash on Delivery is only available for orders below 5,000 ETB. Your payment method has been reset.",
+      "error_generic": "Something went wrong during checkout."
+    }
+  },
+  "admin": {
+    "nav": {
+      "overview": "Overview",
+      "inventory": "Inventory",
+      "orders": "Orders",
+      "customers": "Customers",
+      "tracking": "Logistics Tracking",
+      "finance": "Finance",
+      "settings": "Settings",
+      "logout": "Exit Terminal"
+    },
+    "settings": {
+      "title": "Portal Settings",
+      "subtitle": "Manage your store configuration and global preferences.",
+      "save": "Save Changes",
+      "saving": "Saving...",
+      "save_success": "Settings updated successfully",
+      "sections": {
+        "general": {
+          "title": "General Identity",
+          "store_name": "Store Name",
+          "support_email": "Support Email",
+          "phone": "Contact Phone",
+          "address": "Physical Address"
+        },
+        "financial": {
+          "title": "Operational Params",
+          "tax": "Tax Rate (%)",
+          "delivery": "Base Delivery Fee",
+          "threshold": "Free Shipping Threshold"
+        },
+        "social": {
+          "title": "Social Presence",
+          "facebook": "Facebook URL",
+          "instagram": "Instagram URL",
+          "twitter": "Twitter URL"
+        }
+      }
+    },
+    "dashboard": {
+      "title": "Command Center",
+      "subtitle": "Analytics Overview",
+      "system_status": "System Online",
+      "refresh": "Refresh",
+      "kpi": {
+        "revenue": "Total Revenue",
+        "orders": "Total Orders",
+        "customers": "Total Customers",
+        "delivered": "Delivered Today"
+      },
+      "recent_orders": {
+        "title": "Recent Transactions",
+        "view_all": "View All Orders"
+      },
+      "feedback": {
+        "title": "Customer Feedback",
+        "empty": "No feedback yet"
+      }
+    },
+    "products": {
+      "title": "Product Vault",
+      "subtitle": "Inventory Management",
+      "add_new": "Add New Essential",
+      "tabs": {
+        "all": "All Collections",
+        "published": "Active Catalog",
+        "pending_review": "Review Queue"
+      },
+      "table": {
+        "product": "Product",
+        "category": "Category",
+        "price": "Price",
+        "stock": "Stock",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "modal": {
+        "edit": "Edit Product",
+        "review": "Review Submission",
+        "new": "New Product",
+        "labels": {
+          "name": "Product Name",
+          "description": "Description",
+          "price": "Original Price (Regular)",
+          "stock": "Stock",
+          "category": "Category",
+          "discount_price": "Discount Price (Optional)",
+          "broadcast": "Broadcast this discount to all users as a promotion",
+          "brand": "Brand",
+          "shipping": "Shipping Price",
+          "composition": "Composition & Care",
+          "returns": "Shipping & Returns Info",
+          "images": "Images",
+          "supplier": "Supplier Information",
+          "supplier_name": "Name",
+          "supplier_cost": "Cost Price",
+          "supplier_contact": "Contact"
+        },
+        "placeholders": {
+          "name": "Product name",
+          "description": "Product details...",
+          "price": "0.00",
+          "stock": "0",
+          "category": "Category",
+          "discount_price": "Sale Price",
+          "brand": "Brand",
+          "shipping": "Shipping Price (0 for Free)",
+          "composition": "Material info...",
+          "returns": "Return policy details..."
+        }
+      },
+      "source_selector": {
+        "title": "Create Product",
+        "subtitle": "Choose how you want to start",
+        "submissions": {
+          "title": "From Submissions",
+          "desc": "Pick from storekeeper's requests"
+        },
+        "scratch": {
+          "title": "From Scratch",
+          "desc": "Start with a completely blank form"
+        }
+      },
+      "submissions": {
+        "title": "Storekeeper Submissions",
+        "empty": "No pending submissions",
+        "stock": "Stock",
+        "cost": "Cost"
+      },
+      "toasts": {
+        "upload_success": "Images uploaded successfully",
+        "upload_error": "Upload failed",
+        "delete_confirm": "Are you sure you want to delete this product?",
+        "delete_success": "Product deleted successfully",
+        "delete_error": "Deletion failed",
+        "update_success": "Product updated",
+        "publish_success": "Product published",
+        "save_error": "Failed to save product"
+      }
+    },
+    "orders": {
+      "title": "Order Fulfillment",
+      "subtitle": "Global Logistics",
+      "filters": {
+        "all": "All Orders",
+        "pending": "Awaiting",
+        "processing": "Processing",
+        "shipped": "In Transit",
+        "delivered": "Completed",
+        "cancelled": "Voided"
+      },
+      "status": {
+        "pending": "Awaiting",
+        "confirmed": "Confirmed",
+        "processing": "Processing",
+        "shipped": "Shipped",
+        "out_for_delivery": "Out for Delivery",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      },
+      "active": "Active Orders",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "completed": "Completed",
+      "waiting": "Waiting for Store",
+      "table": {
+        "id": "Order ID",
+        "order": "Order / Tracking",
+        "customer": "Customer",
+        "date": "Date",
+        "amount": "Amount",
+        "status": "Fulfillment",
+        "delivery": "Delivery",
+        "feedback": "Feedback",
+        "actions": "Operations"
+      },
+      "actions": {
+        "view": "Inspect",
+        "print": "Print Invoice"
+      }
+    },
+    "users": {
+      "header": {
+        "title": "Customers & Staff",
+        "subtitle": "Management",
+        "add": "Add New User"
+      },
+      "filters": {
+        "search": "Search by name, email or ID...",
+        "all": "All",
+        "customer": "Customer",
+        "admin": "Admin"
+      },
+      "table": {
+        "user": "User",
+        "status": "Status",
+        "role": "Role",
+        "joined": "Joined",
+        "actions": "Actions",
+        "active": "Active",
+        "suspended": "Suspended",
+        "demote": "Demote to Customer",
+        "promote": "Promote to Admin",
+        "delete": "Delete User",
+        "delete_confirm": "Are you sure you want to permanently delete this user?",
+        "empty": "No users found matching your criteria"
+      },
+      "footer": {
+        "active_customers": "Active Customers",
+        "staff_accounts": "Staff Accounts",
+        "security_note": "Identity data encrypted and secured"
+      }
+    },
+    "finance": {
+      "header": {
+        "title": "Financial Dashboard",
+        "subtitle": "Revenue analytics, financial summaries & report generation"
+      },
+      "filters": {
+        "from": "From",
+        "to": "To",
+        "group_by": "Group By",
+        "daily": "Daily",
+        "monthly": "Monthly",
+        "yearly": "Yearly",
+        "apply": "Apply Filter",
+        "export_format": "Export Format",
+        "generate": "Generate Report",
+        "generating": "Generating..."
+      },
+      "kpis": {
+        "revenue": "Total Revenue",
+        "net_sales": "Net Sales",
+        "tax": "Tax Collected",
+        "shipping": "Shipping Revenue",
+        "orders": "Paid Orders",
+        "aov": "Avg Order Value"
+      },
+      "charts": {
+        "trend": "Revenue Trend",
+        "empty": "No revenue data for this period.",
+        "top_products": "Top Products by Revenue",
+        "products_empty": "No product data for this period.",
+        "table": {
+          "rank": "#",
+          "product": "Product",
+          "units": "Units Sold",
+          "revenue": "Revenue",
+          "share": "Share",
+          "breakdown": "Breakdown"
+        }
+      }
+    },
+    "delivery_tracking": {
+      "title": "Logistics Tracking",
+      "subtitle": "Real-time personnel monitoring",
+      "stats": {
+        "online": "Online Now",
+        "active_orders": "Active Orders"
+      },
+      "search_placeholder": "Search personnel...",
+      "active_label": "Active Personnel",
+      "no_results": "No personnel match your search.",
+      "no_active": "No active delivery personnel at the moment.",
+      "status": {
+        "online": "Online",
+        "idle": "Idle",
+        "offline": "Offline"
+      },
+      "orders_count": "{{count}} orders",
+      "completed_count": "{{count}} done",
+      "focus": "Focus",
+      "time": {
+        "seconds_ago": "{{count}}s ago",
+        "minutes_ago": "{{count}}m ago"
+      },
+      "detail": {
+        "phone": "Phone",
+        "location": "Current Location",
+        "active_orders": "Active Orders",
+        "view_order": "View Order",
+        "directions": "Get Directions"
+      }
+    },
+    "delivery": {
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "cod": "COD",
+      "digital": "Digital",
+      "confirm_collection": "Confirm cash collection of {{amount}} ETB for Order #{{id}}?",
+      "payment_error": "Failed to confirm payment: {{message}}"
+    }
+  },
+  "footer": {
+    "brand_description": "Curating premium minimalist essentials for the modern individual. Quality craftsmanship meets sustainable design.",
+    "sections": {
+      "collections": {
+        "title": "Collections",
+        "items": {
+          "all": "All Products",
+          "new": "New Arrivals",
+          "best": "Best Sellers",
+          "archive": "Archive"
+        }
+      },
+      "support": {
+        "title": "Support",
+        "items": {
+          "track": "Track Order",
+          "shipping": "Shipping Policy",
+          "returns": "Return Portal",
+          "help": "Help Center"
+        }
+      },
+      "legal": {
+        "title": "Legal",
+        "items": {
+          "terms": "Terms & Conditions",
+          "privacy": "Privacy Policy",
+          "cookies": "Cookie Policy",
+          "imprint": "Imprint"
+        }
+      }
+    },
+    "trust": {
+      "shipping": {
+        "title": "GLOBAL SHIPPING",
+        "desc": "Premium doorstep delivery"
+      },
+      "payment": {
+        "title": "SECURE CHECKOUT",
+        "desc": "100% encrypted payments"
+      },
+      "returns": {
+        "title": "EASY RETURNS",
+        "desc": "30-day effortless returns"
+      }
+    },
+    "copyright": "ALEX RETAIL. ALL RIGHTS RESERVED.",
+    "location": "ADDIS ABABA, ETHIOPIA",
+    "newsletter": {
+      "title": "Stay in the Circle",
+      "description": "Receive early access to new drops and exclusive minimalist inspiration.",
+      "placeholder": "Enter your email",
+      "button": "Subscribe",
+      "success": "Thank you for joining our circle!"
+    },
+    "chat": {
+      "title": "Alex Concierge",
+      "status": "Online & Ready",
+      "welcome": "Welcome to Alex Retail. How can I assist you with your premium selection today?",
+      "placeholder": "Type your message..."
+    }
+  }
+}

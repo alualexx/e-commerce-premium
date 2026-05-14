@@ -118,8 +118,24 @@ const OrderDetailPage = () => {
               </div>
               <div style={{ display: 'flex', gap: '1rem' }}>
                  <button
+                  disabled={order.paymentMethod === 'cash_on_delivery' && !order.isPaid}
                   onClick={handlePrint}
-                  style={{ padding: '0.75rem 1.5rem', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', fontSize: '0.75rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}
+                  style={{ 
+                    padding: '0.75rem 1.5rem', 
+                    borderRadius: '12px', 
+                    border: '1px solid var(--border-color)', 
+                    background: (order.paymentMethod === 'cash_on_delivery' && !order.isPaid) ? 'var(--bg-sub)' : 'var(--bg-card)', 
+                    fontSize: '0.75rem', 
+                    fontWeight: 800, 
+                    cursor: (order.paymentMethod === 'cash_on_delivery' && !order.isPaid) ? 'not-allowed' : 'pointer', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.5rem', 
+                    color: (order.paymentMethod === 'cash_on_delivery' && !order.isPaid) ? 'var(--text-muted)' : 'var(--text-main)',
+                    opacity: (order.paymentMethod === 'cash_on_delivery' && !order.isPaid) ? 0.6 : 1,
+                    transition: 'all 0.3s'
+                  }}
+                  title={(order.paymentMethod === 'cash_on_delivery' && !order.isPaid) ? 'Invoice available after payment' : 'Print Invoice'}
                  >
                     <FiPrinter size={16} /> Print Invoice
                  </button>
@@ -173,6 +189,39 @@ const OrderDetailPage = () => {
               </Link>
             </div>
           </motion.div>
+        )}
+
+        {/* Invoice Pending Notice */}
+        {order.paymentMethod === 'cash_on_delivery' && !order.isPaid && (
+          <div style={{
+            ...cardStyle,
+            marginBottom: '2rem',
+            background: 'linear-gradient(to right, var(--bg-sub), var(--bg-card))',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1.5rem',
+            border: '1px solid var(--border-color)',
+            padding: '2.5rem'
+          }}>
+            <div style={{ 
+              width: '56px', height: '56px', background: 'var(--text-main)', borderRadius: '18px', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--bg-main)',
+              boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
+            }}>
+              <FiPrinter size={24} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 900, marginBottom: '0.5rem', color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif' }}>Official Invoice Pending</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600, margin: 0, lineHeight: 1.5 }}>
+                For Cash on Delivery orders, official tax invoices are generated and unlocked only after the delivery person confirms the collection of payment. 
+                Thank you for your patience.
+              </p>
+            </div>
+            <div style={{ padding: '0.75rem 1.25rem', background: 'rgba(0,0,0,0.03)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+              <span style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Status</span>
+              <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: 800, color: 'var(--warning-color)' }}>Awaiting Payment</p>
+            </div>
+          </div>
         )}
 
         {/* Status Timeline */}
@@ -418,9 +467,11 @@ const OrderDetailPage = () => {
       </div>
 
       {/* Hidden Invoice for printing */}
-      <div className="invoice-print-wrapper" style={{ display: 'none' }}>
-        <Invoice order={order} />
-      </div>
+      {!(order.paymentMethod === 'cash_on_delivery' && !order.isPaid) && (
+        <div className="invoice-print-wrapper" style={{ display: 'none' }}>
+          <Invoice order={order} />
+        </div>
+      )}
     </div>
   );
 };

@@ -48,7 +48,9 @@ const RegisterPage = () => {
           borderRadius: '12px'
         }
       });
-      navigate('/login');
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirect = searchParams.get('redirect');
+      navigate(redirect ? `/login?redirect=${redirect}` : '/login');
     } catch (err) {}
   };
 
@@ -232,7 +234,7 @@ const RegisterPage = () => {
           </form>
 
           <p style={{ textAlign: 'center', marginTop: '2.5rem', fontSize: '0.85rem', color: '#9ca3af', fontWeight: 500 }}>
-            Already have an account? <Link to="/login" style={{ color: '#111', fontWeight: 800, textDecoration: 'none' }}>Sign In</Link>
+            Already have an account? <Link to={`/login${window.location.search}`} style={{ color: '#111', fontWeight: 800, textDecoration: 'none' }}>Sign In</Link>
           </p>
         </div>
       </div>

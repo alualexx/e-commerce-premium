@@ -44,6 +44,32 @@ const PAYMENT_CONFIG = {
       'Authorize with your Amole PIN'
     ],
     ussd: '*817#'
+  },
+  abyssinia: {
+    name: 'Bank of Abyssinia',
+    color: '#F4B41A',
+    gradient: 'linear-gradient(135deg, #F4B41A 0%, #F5C64A 100%)',
+    icon: '🏦',
+    instructions: [
+      'Open Apollo app by Bank of Abyssinia',
+      'Select "Scan & Pay" or enter Merchant ID',
+      'Verify the amount and confirm payment',
+      'Enter the transaction reference below'
+    ],
+    ussd: '*815#'
+  },
+  chapa: {
+    name: 'Chapa Secure',
+    color: '#00A859',
+    gradient: 'linear-gradient(135deg, #00A859 0%, #15D275 100%)',
+    icon: '💳',
+    instructions: [
+      'Open the Chapa payment link (SMS/Email)',
+      'Select your preferred local bank or wallet',
+      'Complete the payment securely',
+      'Enter your payment reference below'
+    ],
+    ussd: 'Online'
   }
 };
 

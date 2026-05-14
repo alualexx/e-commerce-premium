@@ -67,6 +67,18 @@ const productSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  shippingPrice: {
+    type: Number,
+    default: 0
+  },
+  composition: {
+    type: String,
+    default: 'Premium high-quality materials, ethically sourced and handcrafted for durability and comfort.'
+  },
+  returnPolicy: {
+    type: String,
+    default: 'Hassle-free 30-day return window. Items must be in original condition with tags attached.'
+  },
   status: {
     type: String,
     enum: ['draft', 'pending_review', 'published'],

@@ -9,7 +9,7 @@ const ProductCard = ({ product, index = 0 }) => {
   const addItem = useCartStore(s => s.addItem);
   const { user, toggleWishlist } = useAuthStore();
 
-  const isWishlisted = user?.wishlist?.includes(product._id);
+  const isWishlisted = user?.wishlist?.includes?.(product._id);
   const isOutOfStock = product.stock === 0;
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
 
@@ -27,8 +27,8 @@ const ProductCard = ({ product, index = 0 }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       style={{ height: '100%' }}
@@ -134,7 +134,12 @@ const ProductCard = ({ product, index = 0 }) => {
             <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {hasDiscount && (
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'line-through', fontWeight: 600 }}>{formatPrice(product.compareAtPrice)}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'line-through', fontWeight: 600 }}>{formatPrice(product.compareAtPrice)}</span>
+                    <span style={{ fontSize: '0.7rem', color: '#a3e635', fontWeight: 900, background: 'rgba(163,230,53,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px' }}>
+                      -{Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)}%
+                    </span>
+                  </div>
                 )}
                 <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif' }}>{formatPrice(product.price)}</span>
               </div>

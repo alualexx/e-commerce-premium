@@ -5,22 +5,24 @@ import useThemeStore from '../../store/useThemeStore';
 import { useEffect } from 'react';
 
 const DeliveryLayout = () => {
-  const { user, logout, loadUser } = useAuthStore();
+  const { user, logout, isHydrated, loading } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadUser();
-  }, [loadUser]);
-
-  useEffect(() => {
     const allowedRoles = ['delivery', 'admin', 'store'];
-    if (!user) {
+    if (isHydrated && (!user || !allowedRoles.includes(user.role))) {
       navigate('/login');
-    } else if (!allowedRoles.includes(user.role)) {
-      navigate('/');
     }
-  }, [user, navigate]);
+  }, [user, navigate, isHydrated]);
+
+  if (!isHydrated || (loading && !user)) {
+    return (
+      <div style={{ height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
+        <FiTruck className="animate-spin" size={48} color="var(--primary-color)" />
+      </div>
+    );
+  }
 
   const handleLogout = () => {
     logout();

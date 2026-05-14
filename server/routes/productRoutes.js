@@ -4,14 +4,14 @@ const {
   getProducts, getProduct, getProductById, getFeaturedProducts,
   getCategories, createProduct, updateProduct, deleteProduct, createReview
 } = require('../controllers/productController');
-const { protect } = require('../middleware/auth');
+const { protect, optionalAuth } = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const storeAuth = require('../middleware/storeAuth');
 const { getInventoryStats, updateStock, createProductForReview } = require('../controllers/productController');
 
 router.get('/featured/list', getFeaturedProducts);
 router.get('/categories/list', getCategories);
-router.get('/', getProducts);
+router.get('/', optionalAuth, getProducts);
 router.get('/:slug', getProduct);
 router.get('/id/:id', getProductById);
 router.post('/:id/reviews', protect, createReview);

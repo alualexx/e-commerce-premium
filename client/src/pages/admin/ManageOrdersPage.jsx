@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FiPackage, FiEye, FiCheck, FiTruck, FiX, FiFilter, FiSearch, FiPrinter, FiShoppingBag, FiInfo, FiActivity, FiStar, FiUser, FiMapPin, FiCopy } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../utils/api';
 import { formatPrice, formatDate } from '../../utils/formatters';
 import LoadingScreen from '../../components/common/LoadingScreen';
+import toast from 'react-hot-toast';
 
 const ManageOrdersPage = () => {
+  const { t } = useTranslation();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [deliveryPersonnel, setDeliveryPersonnel] = useState([]);
 
   useEffect(() => {
     fetchOrders();
-    fetchDeliveryPersonnel();
   }, []);
 
   const fetchOrders = async () => {
@@ -29,30 +30,11 @@ const ManageOrdersPage = () => {
     }
   };
 
-  const fetchDeliveryPersonnel = async () => {
-    try {
-      const { data } = await api.get('/orders/delivery/personnel');
-      setDeliveryPersonnel(data);
-    } catch (error) {
-      console.error('Failed to fetch delivery personnel');
-    }
-  };
-
-  // Status is driven automatically by role actions:
-  // Store Keeper → marks processing/shipped
-  // Admin → assigns delivery person (auto sets out_for_delivery)
-  // Delivery Person → completes delivery (auto sets delivered)
-
-  const handleAssignDelivery = async (orderId, deliveryPersonId) => {
-    try {
-      await api.put(`/orders/${orderId}/status`, {
-        status: 'out_for_delivery',
-        deliveryPerson: deliveryPersonId
-      });
-      fetchOrders();
-    } catch (error) {
-      console.error('Failed to assign delivery');
-    }
+  const handlePrintInvoice = (order) => {
+    toast.success(`${t('admin.orders.actions.print')}: #${order._id.toString().slice(-6).toUpperCase()}`);
+    setTimeout(() => {
+      window.print();
+    }, 500);
   };
 
   const filteredOrders = (Array.isArray(orders) ? orders : []).filter(order => {
@@ -100,15 +82,15 @@ const ManageOrdersPage = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: '2.5rem', borderBottom: '1px solid var(--border-color)' }}>
         <div>
-           <p style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-color)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Fulfillment</p>
-           <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>Orders</h1>
+           <p style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent-color)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>{t('admin.orders.subtitle')}</p>
+           <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>{t('admin.orders.title')}</h1>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'var(--bg-card)', padding: '0.75rem 1.25rem', borderRadius: '16px', border: '1px solid var(--border-color)', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
            <div style={{ width: '32px', height: '32px', background: 'var(--bg-sub)', color: 'var(--accent-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <FiActivity size={14} />
            </div>
            <p style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-             {orders.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length} Active Orders
+             {orders.filter(o => o.status !== 'delivered' && o.status !== 'cancelled').length} {t('admin.orders.active')}
            </p>
         </div>
       </div>
@@ -119,7 +101,7 @@ const ManageOrdersPage = () => {
             <FiSearch style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={16} />
             <input
               type="text"
-              placeholder="Search by Order ID, Customer, or Tracking..."
+              placeholder={t('common.search')}
               style={{
                 width: '100%', padding: '1rem 1.25rem 1rem 3.5rem', borderRadius: '16px',
                 border: '1px solid var(--border-color)', background: 'var(--bg-card)',
@@ -144,7 +126,7 @@ const ManageOrdersPage = () => {
                   cursor: 'pointer', transition: 'all 0.2s'
                 }}
               >
-                {f.replace(/_/g, ' ')}
+                {t(`admin.orders.filters.${f}`)}
               </button>
             ))}
          </div>
@@ -156,7 +138,7 @@ const ManageOrdersPage = () => {
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                  <thead>
                     <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-                       {['Order / Tracking', 'Customer', 'Date', 'Amount', 'Status', 'Delivery', 'Feedback', 'Actions'].map(h => (
+                       {[t('admin.orders.table.order'), t('admin.orders.table.customer'), t('admin.orders.table.date'), t('admin.orders.table.amount'), t('admin.orders.table.status'), t('admin.orders.table.delivery'), t('admin.orders.table.feedback'), t('admin.orders.table.actions')].map(h => (
                           <th key={h} style={{ textAlign: 'left', padding: '1.25rem 1rem', fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{h}</th>
                        ))}
                     </tr>
@@ -164,7 +146,6 @@ const ManageOrdersPage = () => {
                  <tbody>
                     {filteredOrders.map((order) => (
                        <tr key={order._id} style={{ borderBottom: '1px solid var(--border-color)', transition: 'background 0.2s' }}>
-                          {/* Order ID + Tracking */}
                           <td style={{ padding: '1.25rem 1rem' }}>
                              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -178,62 +159,41 @@ const ManageOrdersPage = () => {
                                 )}
                              </div>
                           </td>
-
-                          {/* Customer */}
                           <td style={{ padding: '1.25rem 1rem' }}>
                              <p style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-main)' }}>{order.shippingAddress?.fullName || order.user?.name || 'Guest'}</p>
                              <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700 }}>{order.shippingAddress?.phone || order.user?.email}</p>
                           </td>
-
-                          {/* Date */}
                           <td style={{ padding: '1.25rem 1rem' }}>
                              <p style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-main)' }}>{formatDate(order.createdAt)}</p>
                           </td>
-
-                          {/* Amount */}
                           <td style={{ padding: '1.25rem 1rem' }}>
                              <p style={{ fontSize: '0.95rem', fontWeight: 900, color: 'var(--text-main)' }}>{formatPrice(order.totalPrice)}</p>
-                             <p style={{ fontSize: '0.6rem', fontWeight: 800, color: order.isPaid ? 'var(--success-color)' : 'var(--warning-color)', textTransform: 'uppercase', marginTop: '2px' }}>{order.isPaid ? 'Paid' : 'Unpaid'}</p>
+                             <p style={{ fontSize: '0.6rem', fontWeight: 800, color: order.isPaid ? 'var(--success-color)' : 'var(--warning-color)', textTransform: 'uppercase', marginTop: '2px' }}>{order.isPaid ? t('admin.orders.paid') : t('admin.orders.unpaid')}</p>
                           </td>
-
-                          {/* Status Badge (Read-Only — driven by role actions) */}
                           <td style={{ padding: '1.25rem 1rem' }}>
-                            <span style={getStatusStyle(order.status)}>
-                              {order.status.replace(/_/g, ' ')}
-                            </span>
+                             <span style={getStatusStyle(order.status)}>
+                                {t(`admin.orders.status.${order.status}`, { defaultValue: order.status?.replace(/_/g, ' ') })}
+                             </span>
                           </td>
-
-                          {/* Delivery Person */}
                           <td style={{ padding: '1.25rem 1rem' }}>
                             {order.status === 'delivered' ? (
                               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <FiCheck size={12} color="var(--success-color)" />
                                 <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--success-color)' }}>
-                                  {order.deliveryPerson?.name || 'Completed'}
+                                  {order.deliveryPerson?.name || t('admin.orders.completed')}
                                 </span>
                               </div>
-                            ) : deliveryPersonnel.length > 0 ? (
-                              <select
-                                value={order.deliveryPerson?._id || order.deliveryPerson || ''}
-                                onChange={(e) => handleAssignDelivery(order._id, e.target.value)}
-                                style={{
-                                  padding: '0.4rem 0.6rem', borderRadius: '8px', fontSize: '0.7rem',
-                                  fontWeight: 700, border: '1px solid var(--border-color)',
-                                  background: 'var(--bg-sub)', color: 'var(--text-main)',
-                                  outline: 'none', cursor: 'pointer', maxWidth: '120px'
-                                }}
-                              >
-                                <option value="">Assign...</option>
-                                {deliveryPersonnel.map(p => (
-                                  <option key={p._id} value={p._id}>{p.name}</option>
-                                ))}
-                              </select>
+                            ) : order.deliveryPerson ? (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <FiTruck size={12} color="var(--primary-color)" />
+                                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--primary-color)' }}>
+                                  {order.deliveryPerson?.name || order.deliveryPerson}
+                                </span>
+                              </div>
                             ) : (
-                              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>—</span>
+                              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>{t('admin.orders.waiting')}</span>
                             )}
                           </td>
-
-                          {/* Feedback */}
                           <td style={{ padding: '1.25rem 1rem' }}>
                             {order.feedback?.rating ? (
                               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -248,16 +208,24 @@ const ManageOrdersPage = () => {
                               <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>—</span>
                             )}
                           </td>
-
-                          {/* Actions */}
                           <td style={{ padding: '1.25rem 1rem' }}>
                              <div style={{ display: 'flex', gap: '0.5rem' }}>
                                 <button
                                   onClick={() => setSelectedOrder(order)}
+                                  title={t('admin.orders.actions.view')}
                                   style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'none', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', cursor: 'pointer' }}
                                 >
                                   <FiEye size={16} />
                                 </button>
+                                {order.isPaid && (
+                                  <button
+                                    onClick={() => handlePrintInvoice(order)}
+                                    title={t('admin.orders.actions.print')}
+                                    style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'none', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-color)', cursor: 'pointer' }}
+                                  >
+                                    <FiPrinter size={16} />
+                                  </button>
+                                )}
                              </div>
                           </td>
                        </tr>
@@ -331,9 +299,16 @@ const ManageOrdersPage = () => {
 
               {/* Status Badge */}
               <div style={{ marginBottom: '1.5rem' }}>
-                <span style={getStatusStyle(selectedOrder.status)}>
-                  {selectedOrder.status.replace(/_/g, ' ')}
-                </span>
+                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div style={{ padding: '1rem', background: 'var(--bg-sub)', borderRadius: '16px', border: '1px solid var(--border-color)', flex: 1, minWidth: '150px' }}>
+                      <p style={{ fontSize: '0.6rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Payment Status</p>
+                      <p style={{ fontSize: '0.9rem', fontWeight: 800, color: selectedOrder.isPaid ? 'var(--success-color)' : 'var(--warning-color)' }}>{selectedOrder.isPaid ? t('admin.orders.paid') : t('admin.orders.unpaid')}</p>
+                    </div>
+                    <div style={{ padding: '1rem', background: 'var(--bg-sub)', borderRadius: '16px', border: '1px solid var(--border-color)', flex: 1, minWidth: '150px' }}>
+                      <p style={{ fontSize: '0.6rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>Fulfillment</p>
+                      <p style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--primary-color)' }}>{t(`admin.orders.status.${selectedOrder.status}`, { defaultValue: selectedOrder.status })}</p>
+                    </div>
+                  </div>
               </div>
 
               {/* Customer Info */}

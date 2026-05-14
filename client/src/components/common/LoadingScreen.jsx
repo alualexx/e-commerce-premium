@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { FiActivity } from 'react-icons/fi';
 
 const LoadingScreen = () => {
+  const { t } = useTranslation();
+
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'var(--bg-main)', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem' }}>
       <div style={{ position: 'relative' }}>
@@ -34,7 +37,7 @@ const LoadingScreen = () => {
             animate={{ opacity: 1 }}
             style={{ fontSize: '0.65rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5em', color: 'var(--text-main)' }}
          >
-            Initializing Experience
+            {t('common.loading')}
          </motion.h2>
          <div style={{ width: '128px', height: '2px', background: 'var(--bg-sub)', borderRadius: '999px', margin: '1rem auto', position: 'relative', overflow: 'hidden' }}>
             <motion.div 
@@ -46,7 +49,7 @@ const LoadingScreen = () => {
       </div>
 
       <div style={{ position: 'fixed', bottom: '3rem', textAlign: 'center' }}>
-         <p style={{ fontSize: '0.5rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.3em' }}>Aesthetic Integrity Verified</p>
+         <p style={{ fontSize: '0.5rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.3em' }}>{t('admin.dashboard.system_status')}</p>
       </div>
     </div>
   );

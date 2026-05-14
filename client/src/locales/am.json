@@ -1,0 +1,621 @@
+{
+  "nav": {
+    "shop": "ሸምት",
+    "cart": "ቅርጫት",
+    "login": "ግባ",
+    "register": "ተመዝገብ",
+    "logout": "ውጣ",
+    "about": "ስለ እኛ",
+    "contact": "አግኙን",
+    "orders": "ትዕዛዞቼ",
+    "profile": "ፕሮፋይል"
+  },
+  "orders": {
+    "status": {
+      "pending": "በጥበቃ ላይ",
+      "processing": "በዝግጅት ላይ",
+      "shipped": "ተልኳል",
+      "out_for_delivery": "ለማድረስ ወጥቷል",
+      "delivered": "ደርሷል",
+      "cancelled": "ተሰርዟል"
+    }
+  },
+  "common": {
+    "home": "መነሻ",
+    "add_to_cart": "ወደ ቅርጫት ጨምር",
+    "loading": "በማዘጋጀት ላይ...",
+    "error": "ያልተጠበቀ ስህተት ተከስቷል",
+    "retry": "እንደገና ሞክር",
+    "view_all": "ሁሉንም እይ",
+    "shop_now": "አሁኑኑ ይሸምቱ",
+    "cancel": "ሰርዝ",
+    "save": "ለውጦችን አስቀምጥ",
+    "publish": "አትም",
+    "search": "ፈልግ...",
+    "delete": "ሰርዝ",
+    "edit": "አስተካክል",
+    "view": "ዝርዝር እይ",
+    "no_results": "ምንም ውጤት አልተገኘም",
+    "refresh": "አድስ"
+  },
+  "shop": {
+    "catalog": "ካታሎግ",
+    "title_default": "ስብስቡ",
+    "description": "ጥራትን እና ቀላልነትን ለሚመርጡ ዘመናዊ ግለሰቦች የተነደፉ የእኛን ፕሪሚየም ሚኒማሊስት ስብስቦች ያስሱ።",
+    "filters": "ማጣሪያዎች",
+    "units_available": "ክምችት ላይ ያሉ",
+    "search_placeholder": "ስብስቡን ፈልግ...",
+    "categories": "ምድቦች",
+    "clear": "አጽዳ",
+    "all_collections": "ሁሉም ስብስቦች",
+    "sort": {
+      "newest": "አዲስ መጀመሪያ",
+      "price_asc": "ዋጋ፡ ከዝቅተኛ ወደ ከፍተኛ",
+      "price_desc": "ዋጋ፡ ከከፍተኛ ወደ ዝቅተኛ",
+      "rating": "ከፍተኛ ደረጃ"
+    },
+    "promo": {
+      "title": "ክበባችንን ይቀላቀሉ",
+      "description": "አዳዲስ ስብስቦችን ቀድመው ያግኙ እና የፕሪሚየም አባልነት ቅናሾችን ይደሰቱ።",
+      "button": "አሁኑኑ ይቀላቀሉ"
+    },
+    "empty": {
+      "title": "ምንም ውጤት አልተገኘም",
+      "description": "ከማጣሪያዎ ጋር የሚዛመድ ምንም ምርት አላገኘንም። እባክዎ ሌላ ፍለጋ ይሞክሩ ወይም ማጣሪያዎቹን ያጽዱ።",
+      "button": "ሁሉንም ማጣሪያዎች አጽዳ"
+    }
+  },
+  "home": {
+    "hero": {
+      "slides": [
+        {
+          "subtitle": "Spring Summer 2026",
+          "title": "Minimalist Essence.",
+          "description": "Discover our new seasonal collection where premium craftsmanship meets contemporary minimalist philosophy.",
+          "cta": "Shop Collection"
+        },
+        {
+          "subtitle": "Premium Essentials",
+          "title": "Curated for the Modern Life.",
+          "description": "Elevate your daily routine with pieces designed to last, using the world's finest sustainable materials.",
+          "cta": "Explore Now"
+        }
+      ],
+      "branding": "ESTABLISHED MMXXVI — ALEX RETAIL"
+    },
+    "trust": {
+      "shipping": {
+        "title": "አለምአቀፍ ጭነት",
+        "desc": "ፕሪሚየም የበር ላይ ርክክብ"
+      },
+      "secure": {
+        "title": "ደህንነቱ የተጠበቀ ክፍያ",
+        "desc": "100% የተመሰጠረ ክፍያ"
+      },
+      "support": {
+        "title": "የደንበኞች ድጋፍ",
+        "desc": "24/7 የፕሪሚየም ድጋፍ"
+      },
+      "returns": {
+        "title": "ቀላል ተመላሽ",
+        "desc": "የ30 ቀን የመመለስ መብት"
+      }
+    },
+    "categories": {
+      "explore": "ስብስቦችን ያስሱ",
+      "title": "በምድብ ይሸምቱ",
+      "tags": {
+        "featured": "ተለይተው የቀረቡ",
+        "new": "አዲስ የመጡ",
+        "sale": "ወቅታዊ ቅናሽ"
+      }
+    },
+    "featured": {
+      "title": "ተለይተው የቀረቡ ስብስቦች",
+      "subtitle": "የተመረጡ ስብስቦች",
+      "empty": "እስካሁን ምንም ተለይቶ የቀረበ ምርት የለም።",
+      "browse": "ሁሉንም ምርቶች ያስሱ"
+    },
+    "story": {
+      "subtitle": "ታሪካችን",
+      "title": "Conscious Style.",
+      "title_italic": "Simply Delivered.",
+      "description": "አሌክስ ሪቴይል የተመሰረተው ታላቅ ዲዛይን እና ስነ-ምግባር ያለው አቅርቦት አብረው ሊኖሩ ይችላሉ በሚል እምነት ነው። በስብስባችን ውስጥ ያለው እያንዳንዱ ቁራጭ ለእርስዎ እና ለፕላኔቷ በማሰብ የተመረጠ ነው።",
+      "cta": "ተልዕኳችንን ያስሱ"
+    },
+    "newsletter": {
+      "subtitle": "የዜና መጽሔት",
+      "title": "የውስጥ ክበባችንን ይቀላቀሉ",
+      "description": "አዳዲስ ስብስቦችን፣ ልዩ ኤዲቶሪያል ይዘቶችን እና የአባላት ብቻ ዝግጅቶችን ቀድመው ለማግኘት ይመዝገቡ።",
+      "placeholder": "የኢሜል አድራሻዎን ያስገቡ",
+      "button": "ይመዝገቡ",
+      "spam_note": "የእርስዎን ግላዊነት እናከብራለን። በማንኛውም ጊዜ መሰረዝ ይችላሉ።"
+    },
+    "promotion": {
+      "exclusive": "ልዩ ልቀት",
+      "limited": "ውስን አቅርቦት",
+      "shop_now": "ቅናሹን ይሸምቱ",
+      "ending": "በቅርቡ ያበቃል",
+      "pricing": "ልዩ ዋጋ",
+      "active": "አቅርቦቱ ንቁ ነው",
+      "live": "አሁን ቀጥታ ስርጭት"
+    }
+  },
+  "profile": {
+    "title": "ፕሮፋይል ያስተካክሉ",
+    "description": "የእርስዎን የግል መረጃ እና በመድረኩ ላይ እንዴት እንደሚታይ ያስተዳድሩ።",
+    "labels": {
+      "name": "ሙሉ ስም",
+      "email": "የኢሜል አድራሻ"
+    },
+    "placeholders": {
+      "name": "ስምዎ",
+      "email": "email@example.com"
+    },
+    "email_note": "ለደህንነት ሲባል ኢሜል መቀየር አይቻልም።",
+    "privacy_note": "የእርስዎ መረጃ በኢንዱስትሪ ደረጃ ምስጠራ የተጠበቀ ነው። ያለእርስዎ ግልጽ ፈቃድ የእርስዎን የግል መረጃ ለሶስተኛ ወገኖች በጭራሽ አናጋራም።",
+    "button": {
+      "save": "ለውጦችን አስቀምጥ"
+    },
+    "messages": {
+      "success": "ፕሮፋይልዎ በተሳካ ሁኔታ ተስተካክሏል",
+      "error": "ፕሮፋይል ማስተካከል አልተሳካም"
+    }
+  },
+  "cart": {
+    "title": "የመገበያያ ቅርጫት",
+    "item": "ዕቃ",
+    "items": "ዕቃዎች",
+    "selected": "የተመረጡ",
+    "remove": "አስወግድ",
+    "clear_all": "ቅርጫቱን በሙሉ አጽዳ",
+    "empty": {
+      "title": "ቅርጫትዎ ባዶ ነው",
+      "description": "የእኛን የቅርብ ጊዜ የፕሪሚየም ሚኒማሊስት ስብስቦችን ያስሱ እና መገብየት ይጀምሩ።",
+      "button": "መገብየት ይጀምሩ"
+    },
+    "summary": {
+      "title": "ማጠቃለያ",
+      "subtotal": "ጠቅላላ ዋጋ",
+      "shipping": "ጭነት",
+      "free": "በነጻ",
+      "total": "ድምር",
+      "checkout": "ክፍያ ፈጽም",
+      "continue": "ግዢ ይቀጥሉ",
+      "security_note": "ደህንነቱ የተጠበቀ ክፍያ በኢንዱስትሪ ደረጃ ምስጠራ የተደገፈ።"
+    }
+  },
+  "checkout": {
+    "title": "ክፍያ",
+    "no_items": {
+      "title": "ለክፍያ የሚሆን ዕቃ የለም",
+      "description": "የመገበያያ ቅርጫትዎ ባዶ ነው። ክፍያ ከመፈጸምዎ በፊት እባክዎ ምርቶችን ይጨምሩ።",
+      "button": "ወደ ስብስቦች ተመለስ"
+    },
+    "steps": {
+      "shipping": "ጭነት",
+      "payment": "ክፍያ",
+      "review": "ክለሳ"
+    },
+    "shipping": {
+      "title": "የጭነት ዝርዝሮች",
+      "full_name": {
+        "label": "ሙሉ ስም",
+        "placeholder": "ሙሉ ስምዎን ያስገቡ"
+      },
+      "address": {
+        "label": "የመንገድ አድራሻ",
+        "placeholder": "ህንፃ፣ መንገድ፣ አካባቢ"
+      },
+      "city": {
+        "label": "ከተማ",
+        "placeholder": "ለምሳሌ አዲስ አበባ"
+      },
+      "phone": {
+        "label": "ስልክ ቁጥር",
+        "placeholder": "+251 ..."
+      }
+    },
+    "payment": {
+      "title": "የክፍያ ዘዴ",
+      "note": "ማሳሰቢያ፡ ከ 5,000 ብር በላይ ለሆኑ ትዕዛዞች ሲረከቡ መክፈል (Cash on Delivery) አይቻልም።",
+      "providers": {
+        "telebirr": "ቴሌብር",
+        "telebirr_desc": "ደህንነቱ የተጠበቀ የሞባይል ክፍያ",
+        "cbe_birr": "ሲቢኢ ብር",
+        "cbe_birr_desc": "ቀጥታ የባንክ ማስተላለፍ",
+        "abyssinia": "አቢሲኒያ ባንክ",
+        "abyssinia_desc": "አፖሎ ዲጂታል ባንክ",
+        "chapa": "ቻፓ ኦንላይን",
+        "chapa_desc": "የክፍያ መተላለፊያ",
+        "cash_on_delivery": "ሲረከቡ ይክፈሉ",
+        "cash_on_delivery_desc": "እቃው ሲደርስዎ ይክፈሉ"
+      }
+    },
+    "review": {
+      "title": "ትዕዛዝዎን ይከልሱ",
+      "shipping_to": "ጭነቱ ወደ",
+      "payment_method": "የክፍያ ዘዴ",
+      "safe_secure": "ደህንነቱ የተጠበቀ ክፍያ",
+      "verified": "የተረጋገጠ"
+    },
+    "summary": {
+      "title": "የትዕዛዝ ማጠቃለያ",
+      "selection": "ምርጫዎችዎ",
+      "qty": "ብዛት",
+      "subtotal": "ጠቅላላ ዋጋ",
+      "shipping": "ጭነት",
+      "tax": "የተገመተ ታክስ",
+      "total": "ድምር",
+      "security": "ለደህንነትዎ ሲባል የተመሰጠረ የክፍያ ሂደት።"
+    },
+    "actions": {
+      "back": "ተመለስ",
+      "continue": "ቀጥል",
+      "processing": "በመካሄድ ላይ...",
+      "complete": "ትዕዛዝ አጠናቅቅ"
+    },
+    "validation": {
+      "name_required": "ለርክክብ ሙሉ ስም ያስፈልጋል",
+      "address_required": "የመንገድ አድራሻ ያስፈልጋል",
+      "city_required": "ከተማ ያስፈልጋል",
+      "phone_invalid": "ትክክለኛ የኢትዮጵያ ስልክ ቁጥር (+251...)",
+      "cod_limit": "ሲረከቡ መክፈል (COD) የሚቻለው ከ 5,000 ብር በታች ለሆኑ ትዕዛዞች ብቻ ነው። የክፍያ ዘዴዎ ተቀይሯል።",
+      "error_generic": "ክፍያ ሲፈጽሙ ስህተት ተከስቷል።"
+    }
+  },
+  "admin": {
+    "nav": {
+      "overview": "አጠቃላይ እይታ",
+      "inventory": "ክምችት",
+      "orders": "ትዕዛዞች",
+      "customers": "ደንበኞች",
+      "tracking": "ሎጅስቲክስ መከታተያ",
+      "finance": "ፋይናንስ",
+      "settings": "ቅንብሮች",
+      "logout": "ውጣ"
+    },
+    "settings": {
+      "title": "የፖርታል ቅንብሮች",
+      "subtitle": "የሱቅዎን ውቅር እና አጠቃላይ ምርጫዎች ያስተዳድሩ።",
+      "save": "ለውጦችን አስቀምጥ",
+      "saving": "በማስቀመጥ ላይ...",
+      "save_success": "ቅንብሮች በትክክል ተዘምነዋል",
+      "sections": {
+        "general": {
+          "title": "አጠቃላይ መረጃ",
+          "store_name": "የሱቅ ስም",
+          "support_email": "የድጋፍ ኢሜይል",
+          "phone": "የመገናኛ ስልክ",
+          "address": "አድራሻ"
+        },
+        "financial": {
+          "title": "የአሰራር መለኪያዎች",
+          "tax": "የታክስ መጠን (%)",
+          "delivery": "መሰረታዊ የርክክብ ክፍያ",
+          "threshold": "ከክፍያ ነጻ የሚሆንበት መጠን"
+        },
+        "social": {
+          "title": "ማህበራዊ ሚዲያ",
+          "facebook": "ፌስቡክ",
+          "instagram": "ኢንስታግራም",
+          "twitter": "ትዊተር"
+        }
+      }
+    },
+    "dashboard": {
+      "title": "የትዕዛዝ ማእከል",
+      "subtitle": "አጠቃላይ የትንታኔ እይታ",
+      "system_status": "ሲስተሙ በጥሩ ሁኔታ ላይ ነው",
+      "refresh": "አድስ",
+      "kpi": {
+        "revenue": "ጠቅላላ ገቢ",
+        "orders": "ጠቅላላ ትዕዛዞች",
+        "customers": "ጠቅላላ ደንበኞች",
+        "delivered": "ዛሬ የደረሱ"
+      },
+      "recent_orders": {
+        "title": "የቅርብ ጊዜ ግብይቶች",
+        "view_all": "ሁሉንም ትዕዛዞች እይ"
+      },
+      "feedback": {
+        "title": "የደንበኞች አስተያየት",
+        "empty": "እስካሁን ምንም አስተያየት የለም"
+      }
+    },
+    "products": {
+      "title": "የምርት ማከማቻ",
+      "subtitle": "የክምችት አስተዳደር",
+      "add_new": "አዲስ ምርት ጨምር",
+      "tabs": {
+        "all": "ሁሉም ስብስቦች",
+        "published": "ንቁ ካታሎግ",
+        "pending_review": "የክለሳ ወረፋ"
+      },
+      "table": {
+        "product": "ምርት",
+        "category": "ምድብ",
+        "price": "ዋጋ",
+        "stock": "ክምችት",
+        "status": "ሁኔታ",
+        "actions": "እርምጃዎች"
+      },
+      "modal": {
+        "edit": "ምርት ያስተካክሉ",
+        "review": "ማቅረቢያውን ይከልሱ",
+        "new": "አዲስ ምርት",
+        "labels": {
+          "name": "የምርት ስም",
+          "description": "መግለጫ",
+          "price": "የመጀመሪያ ዋጋ",
+          "stock": "ክምችት",
+          "category": "ምድብ",
+          "discount_price": "የቅናሽ ዋጋ (ከተፈለገ)",
+          "broadcast": "ይህን ቅናሽ ለሁሉም ተጠቃሚዎች እንደ ማስተዋወቂያ አሳውቅ",
+          "brand": "ብራንድ",
+          "shipping": "የጭነት ዋጋ",
+          "composition": "አወቃቀር እና ጥንቃቄ",
+          "returns": "የጭነት እና ተመላሽ መረጃ",
+          "images": "ምስሎች",
+          "supplier": "የአቅራቢ መረጃ",
+          "supplier_name": "ስም",
+          "supplier_cost": "የመግዣ ዋጋ",
+          "supplier_contact": "አድራሻ"
+        },
+        "placeholders": {
+          "name": "የምርት ስም",
+          "description": "የምርት ዝርዝሮች...",
+          "price": "0.00",
+          "stock": "0",
+          "category": "ምድብ",
+          "discount_price": "የሽያጭ ዋጋ",
+          "brand": "ብራንድ",
+          "shipping": "የጭነት ዋጋ (ለነጻ 0 ያስገቡ)",
+          "composition": "የቁሳቁስ መረጃ...",
+          "returns": "የመመለሻ ፖሊሲ ዝርዝሮች..."
+        }
+      },
+      "source_selector": {
+        "title": "ምርት ፍጠር",
+        "subtitle": "እንዴት መጀመር እንደሚፈልጉ ይምረጡ",
+        "submissions": {
+          "title": "ከቀረቡት",
+          "desc": "ከመጋዘን ጠባቂው ጥያቄዎች ውስጥ ይምረጡ"
+        },
+        "scratch": {
+          "title": "ከባዶ",
+          "desc": "በባዶ ፎርም ይጀምሩ"
+        }
+      },
+      "submissions": {
+        "title": "የመጋዘን ጠባቂ ማቅረቢያዎች",
+        "empty": "ምንም በመጠባበቅ ላይ ያሉ ማቅረቢያዎች የሉም",
+        "stock": "ክምችት",
+        "cost": "ዋጋ"
+      },
+      "toasts": {
+        "upload_success": "ምስሎች በተሳካ ሁኔታ ተጭነዋል",
+        "upload_error": "መጫን አልተሳካም",
+        "delete_confirm": "ይህንን ምርት መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?",
+        "delete_success": "ምርቱ በተሳካ ሁኔታ ተሰርዟል",
+        "delete_error": "መሰረዝ አልተሳካም",
+        "update_success": "ምርቱ ተስተካክሏል",
+        "publish_success": "ምርቱ ታትሟል",
+        "save_error": "ምርቱን ማስቀመጥ አልተሳካም"
+      }
+    },
+    "orders": {
+      "title": "የትዕዛዝ አፈጻጸም",
+      "subtitle": "አለምአቀፍ ሎጂስቲክስ",
+      "filters": {
+        "all": "ሁሉም ትዕዛዞች",
+        "pending": "በመጠባበቅ ላይ",
+        "processing": "በሂደት ላይ",
+        "shipped": "በመንገድ ላይ",
+        "delivered": "የተጠናቀቁ",
+        "cancelled": "የተሰረዙ"
+      },
+      "status": {
+        "pending": "በመጠባበቅ ላይ",
+        "confirmed": "የተረጋገጠ",
+        "processing": "በሂደት ላይ",
+        "shipped": "ተልኳል",
+        "out_for_delivery": "ለርክክብ ወጥቷል",
+        "delivered": "ደረሰ",
+        "cancelled": "ተሰርዟል"
+      },
+      "active": "ንቁ ትዕዛዞች",
+      "paid": "የተከፈለ",
+      "unpaid": "ያልተከፈለ",
+      "completed": "የተጠናቀቀ",
+      "waiting": "መጋዘን በመጠባበቅ ላይ",
+      "table": {
+        "id": "የትዕዛዝ ቁጥር",
+        "order": "ትዕዛዝ / መከታተያ",
+        "customer": "ደንበኛ",
+        "date": "ቀን",
+        "amount": "ዋጋ",
+        "status": "አፈጻጸም",
+        "delivery": "ርክክብ",
+        "feedback": "አስተያየት",
+        "actions": "እርምጃዎች"
+      },
+      "actions": {
+        "view": "መርምር",
+        "print": "ደረሰኝ አትም"
+      }
+    },
+    "users": {
+      "header": {
+        "title": "ደንበኞች እና ሰራተኞች",
+        "subtitle": "አስተዳደር",
+        "add": "አዲስ ተጠቃሚ ጨምር"
+      },
+      "filters": {
+        "search": "በስም፣ በኢሜል ወይም በመታወቂያ ይፈልጉ...",
+        "all": "ሁሉም",
+        "customer": "ደንበኛ",
+        "admin": "አድሚን"
+      },
+      "table": {
+        "user": "ተጠቃሚ",
+        "status": "ሁኔታ",
+        "role": "ሚና",
+        "joined": "የተቀላቀለበት",
+        "actions": "እርምጃዎች",
+        "active": "ንቁ",
+        "suspended": "የታገደ",
+        "demote": "ወደ ደንበኛ ዝቅ አድርግ",
+        "promote": "ወደ አድሚን አሳድግ",
+        "delete": "ተጠቃሚውን ሰርዝ",
+        "delete_confirm": "ይህንን ተጠቃሚ በቋሚነት መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት?",
+        "empty": "ከእርስዎ መስፈርት ጋር የሚዛመድ ተጠቃሚ አልተገኘም"
+      },
+      "footer": {
+        "active_customers": "ንቁ ደንበኞች",
+        "staff_accounts": "የሰራተኞች አካውንት",
+        "security_note": "የማንነት መረጃ በምስጢር የተጠበቀ ነው"
+      }
+    },
+    "finance": {
+      "header": {
+        "title": "የፋይናንስ ዳሽቦርድ",
+        "subtitle": "የገቢ ትንታኔ፣ የፋይናንስ ማጠቃለያ እና ሪፖርት ማመንጫ"
+      },
+      "filters": {
+        "from": "ከ",
+        "to": "እስከ",
+        "group_by": "መቧደኛ",
+        "daily": "ዕለታዊ",
+        "monthly": "ወርሃዊ",
+        "yearly": "ዓመታዊ",
+        "apply": "ማጣሪያውን ተግብር",
+        "export_format": "የሪፖርት አይነት",
+        "generate": "ሪፖርት አውጣ",
+        "generating": "በማውጣት ላይ..."
+      },
+      "kpis": {
+        "revenue": "ጠቅላላ ገቢ",
+        "net_sales": "የተጣራ ሽያጭ",
+        "tax": "የተሰበሰበ ታክስ",
+        "shipping": "የማጓጓዣ ገቢ",
+        "orders": "የተከፈለባቸው ትዕዛዞች",
+        "aov": "አማካኝ የትዕዛዝ ዋጋ"
+      },
+      "charts": {
+        "trend": "የገቢ አዝማሚያ",
+        "empty": "ለዚህ ጊዜ ምንም የገቢ መረጃ የለም።",
+        "top_products": "ከፍተኛ ገቢ ያስገኙ ምርቶች",
+        "products_empty": "ለዚህ ጊዜ ምንም የምርት መረጃ የለም።",
+        "table": {
+          "rank": "#",
+          "product": "ምርት",
+          "units": "የተሸጡ ክፍሎች",
+          "revenue": "ገቢ",
+          "share": "ድርሻ",
+          "breakdown": "ዝርዝር"
+        }
+      }
+    },
+    "delivery_tracking": {
+      "title": "የሎጂስቲክስ ክትትል",
+      "subtitle": "የሰራተኞች የእውነተኛ ጊዜ ክትትል",
+      "stats": {
+        "online": "አሁን መስመር ላይ",
+        "active_orders": "ንቁ ትዕዛዞች"
+      },
+      "search_placeholder": "ሰራተኛ ፈልግ...",
+      "active_label": "ንቁ ሰራተኞች",
+      "no_results": "ከፍለጋዎ ጋር የሚዛመድ ሰራተኛ የለም።",
+      "no_active": "በአሁኑ ጊዜ ምንም ንቁ የማድረሻ ሰራተኞች የሉም።",
+      "status": {
+        "online": "መስመር ላይ",
+        "idle": "ስራ የለም",
+        "offline": "ከመስመር ውጭ"
+      },
+      "orders_count": "{{count}} ትዕዛዞች",
+      "completed_count": "{{count}} ተጠናቀቁ",
+      "focus": "አተኩር",
+      "time": {
+        "seconds_ago": "ከ{{count}} ሰከንድ በፊት",
+        "minutes_ago": "ከ{{count}} ደቂቃ በፊት"
+      },
+      "detail": {
+        "phone": "ስልክ",
+        "location": "የአሁኑ ቦታ",
+        "active_orders": "ንቁ ትዕዛዞች",
+        "view_order": "ትዕዛዙን እይ",
+        "directions": "አቅጣጫ አሳይ"
+      }
+    },
+    "delivery": {
+      "paid": "ተከፍሏል",
+      "unpaid": "ልተከፈለ",
+      "cod": "ጥሬ ገንዘብ",
+      "digital": "ዲጂታል",
+      "confirm_collection": "ለትዕዛዝ #{{id}} የ{{amount}} ETB ጥሬ ገንዘብ መቀበልዎን ያረጋግጣሉ?",
+      "payment_error": "ክፍያውን ማረጋገጥ አልተቻለም: {{message}}"
+    }
+  },
+  "footer": {
+    "brand_description": "Curating premium minimalist essentials for the modern individual. Quality craftsmanship meets sustainable design.",
+    "sections": {
+      "collections": {
+        "title": "ስብስቦች",
+        "items": {
+          "all": "ሁሉም ምርቶች",
+          "new": "አዲስ የመጡ",
+          "best": "በብዛት የተሸጡ",
+          "archive": "አርካይቭ"
+        }
+      },
+      "support": {
+        "title": "ድጋፍ",
+        "items": {
+          "track": "ትዕዛዝ ተከታተል",
+          "shipping": "የጭነት ፖሊሲ",
+          "returns": "የመመለሻ ፖርታል",
+          "help": "የእርዳታ ማዕከል"
+        }
+      },
+      "legal": {
+        "title": "ህጋዊ",
+        "items": {
+          "terms": "ውሎች እና ሁኔታዎች",
+          "privacy": "የግላዊነት ፖሊሲ",
+          "cookies": "የኩኪ ፖሊሲ",
+          "imprint": "Imprint"
+        }
+      }
+    },
+    "trust": {
+      "shipping": {
+        "title": "አለምአቀፍ ጭነት",
+        "desc": "ፕሪሚየም የበር ላይ ርክክብ"
+      },
+      "payment": {
+        "title": "ደህንነቱ የተጠበቀ ክፍያ",
+        "desc": "100% የተመሰጠረ ክፍያ"
+      },
+      "returns": {
+        "title": "ቀላል ተመላሽ",
+        "desc": "የ30 ቀን የመመለስ መብት"
+      }
+    },
+    "copyright": "አሌክስ ሪቴይል። መብቱ በህግ የተጠበቀ ነው።",
+    "location": "አዲስ አበባ፣ ኢትዮጵያ",
+    "newsletter": {
+      "title": "ክበባችን ውስጥ ይቆዩ",
+      "description": "አዳዲስ ስብስቦችን እና ልዩ ሚኒማሊስት መነሳሳቶችን ቀድመው ያግኙ።",
+      "placeholder": "ኢሜልዎን ያስገቡ",
+      "button": "ይመዝገቡ",
+      "success": "ክበባችንን ስለተቀላቀሉ እናመሰግናለን!"
+    },
+    "chat": {
+      "title": "የአሌክስ ረዳት",
+      "status": "መስመር ላይ",
+      "welcome": "ወደ አሌክስ ሪቴይል እንኳን ደህና መጡ። ዛሬ እንዴት ልረዳዎት እችላለሁ?",
+      "placeholder": "መልእክትዎን እዚህ ይጻፉ..."
+    }
+  }
+}

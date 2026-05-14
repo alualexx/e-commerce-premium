@@ -18,12 +18,12 @@ const Invoice = ({ order }) => {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
             <div style={{ width: '40px', height: '40px', background: '#111', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 900, fontSize: '1.25rem' }}>A</div>
-            <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.02em' }}>ALEX <span style={{ color: '#3d7a28' }}>RETAIL</span></span>
+          <span style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '-0.02em' }}>ALEX <span style={{ color: '#3d7a28' }}>RETAIL</span></span>
           </div>
           <p style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Premium Minimalist Boutique</p>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 900, margin: 0, letterSpacing: '-0.04em' }}>INVOICE</h1>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 900, margin: 0, letterSpacing: '-0.04em' }}>{order.isPaid ? 'OFFICIAL INVOICE' : 'INVOICE'}</h1>
           <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#3d7a28', marginTop: '0.5rem' }}>#{order._id.toUpperCase().slice(-8)}</p>
         </div>
       </div>

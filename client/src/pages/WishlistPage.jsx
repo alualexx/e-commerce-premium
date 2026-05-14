@@ -109,7 +109,7 @@ const WishlistPage = () => {
                             <p style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>{product.category}</p>
                             <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name}</h3>
                          </div>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'between' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <p style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)', margin: 0 }}>{formatPrice(product.price)}</p>
                             <Link 
                                to={`/product/${product.slug}`}

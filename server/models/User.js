@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['customer', 'admin', 'delivery', 'store_keeper'],
+    enum: ['customer', 'admin', 'delivery', 'store_keeper', 'cashier'],
     default: 'customer'
   },
   avatar: {
@@ -48,6 +48,11 @@ const userSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  currentLocation: {
+    lat: { type: Number },
+    lng: { type: Number },
+    updatedAt: { type: Date }
   }
 }, {
   timestamps: true

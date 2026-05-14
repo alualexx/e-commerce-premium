@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import { FiSearch, FiPackage, FiTruck, FiCheckCircle, FiClock, FiMapPin, FiCopy, FiBox, FiShoppingBag } from 'react-icons/fi';
 import axiosInstance from '../utils/axios';
 
@@ -13,19 +14,28 @@ const statusSteps = [
 ];
 
 const TrackOrderPage = () => {
-  const [trackingNumber, setTrackingNumber] = useState('');
+  const [searchParams] = useSearchParams();
+  const initialNumber = searchParams.get('number') || '';
+  
+  const [trackingNumber, setTrackingNumber] = useState(initialNumber);
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const fetchOrderDetails = async (quiet = false) => {
-    if (!trackingNumber.trim()) return;
+  useEffect(() => {
+    if (initialNumber) {
+      fetchOrderDetails(false, initialNumber);
+    }
+  }, [initialNumber]);
+
+  const fetchOrderDetails = async (quiet = false, tNumber = trackingNumber) => {
+    if (!tNumber.trim()) return;
     if (!quiet) setLoading(true);
     setError('');
 
     try {
-      const { data } = await axiosInstance.get(`/orders/track/${trackingNumber.trim()}`);
+      const { data } = await axiosInstance.get(`/orders/track/${tNumber.trim()}`);
       setOrder(data);
     } catch (err) {
       if (!quiet) {
@@ -72,7 +82,7 @@ const TrackOrderPage = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', padding: '40px 20px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', paddingTop: '120px', paddingBottom: '80px', paddingLeft: '20px', paddingRight: '20px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         {/* Header */}
         <motion.div

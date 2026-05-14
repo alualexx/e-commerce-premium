@@ -1,10 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiTrash2, FiMinus, FiPlus, FiShoppingBag, FiArrowRight, FiShield } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
+import { 
+  FiShoppingBag, 
+  FiArrowRight, 
+  FiMinus, 
+  FiPlus, 
+  FiTrash2, 
+  FiShield 
+} from 'react-icons/fi';
 import useCartStore from '../store/useCartStore';
 import { formatPrice } from '../utils/formatters';
 
 const CartPage = () => {
+  const { t } = useTranslation();
   const { items, removeItem, updateQuantity, clearCart, totalPrice, shippingPrice, grandTotal } = useCartStore();
   const subtotal = totalPrice();
   const shipping = shippingPrice();
@@ -22,9 +31,9 @@ const CartPage = () => {
           <div style={{ width: '80px', height: '80px', background: 'var(--bg-card)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', margin: '0 auto 2rem', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', border: '1px solid var(--border-color)' }}>
              <FiShoppingBag size={32} />
           </div>
-          <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>Your bag is empty</h2>
+          <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>{t('cart.empty.title')}</h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '1rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
-            Discover our latest collection of premium minimalist essentials and start building your wardrobe.
+            {t('cart.empty.description')}
           </p>
           <Link 
             to="/shop" 
@@ -44,7 +53,7 @@ const CartPage = () => {
             onMouseEnter={e => e.target.style.background = 'var(--primary-color)'}
             onMouseLeave={e => e.target.style.background = 'var(--text-main)'}
           >
-            Start Shopping <FiArrowRight />
+            {t('cart.empty.button')} <FiArrowRight />
           </Link>
         </motion.div>
       </div>
@@ -56,10 +65,10 @@ const CartPage = () => {
       <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 6%' }}>
         <div style={{ marginBottom: '4rem' }}>
           <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.04em' }}>
-            Shopping Bag
+            {t('cart.title')}
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.5rem' }}>
-            {items.length} {items.length === 1 ? 'Item' : 'Items'} Selected
+            {items.length} {items.length === 1 ? t('cart.item') : t('cart.items')} {t('cart.selected')}
           </p>
         </div>
 
@@ -86,7 +95,7 @@ const CartPage = () => {
                   }}
                 >
                   <Link to={`/product/${item.slug}`} style={{ width: '120px', height: '150px', borderRadius: '16px', overflow: 'hidden', background: 'var(--bg-sub)', flexShrink: 0, border: '1px solid var(--border-color)' }}>
-                    <img src={item.images?.[0]} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </Link>
 
                   <div style={{ flex: 1, minWidth: '200px' }}>
@@ -136,7 +145,7 @@ const CartPage = () => {
                       onMouseEnter={e => e.currentTarget.style.color = 'var(--danger-color)'}
                       onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
                     >
-                      <FiTrash2 size={14} /> Remove
+                      <FiTrash2 size={14} /> {t('cart.remove')}
                     </button>
                   </div>
                 </motion.div>
@@ -162,7 +171,7 @@ const CartPage = () => {
               onMouseEnter={e => { e.target.style.background = 'var(--bg-danger-light)'; e.target.style.color = 'var(--danger-color)'; }}
               onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = 'var(--text-muted)'; }}
             >
-              Clear Entire Bag
+              {t('cart.clear_all')}
             </button>
           </div>
 
@@ -177,20 +186,20 @@ const CartPage = () => {
               position: 'sticky',
               top: '120px'
             }}>
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-main)', marginBottom: '2rem' }}>Summary</h2>
+               <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '1.5rem', fontWeight: 900, color: 'var(--text-main)', marginBottom: '2rem' }}>{t('cart.summary.title')}</h2>
 
                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                  <span>Subtotal</span>
+                  <span>{t('cart.summary.subtotal')}</span>
                   <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{formatPrice(subtotal)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                  <span>Shipping</span>
-                  <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
+                  <span>{t('cart.summary.shipping')}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{shipping === 0 ? t('cart.summary.free') : formatPrice(shipping)}</span>
                 </div>
                 <div style={{ height: '1px', background: 'var(--border-color)', margin: '0.5rem 0' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                  <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>Total</span>
+                  <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)' }}>{t('cart.summary.total')}</span>
                   <span style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--primary-color)', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em' }}>
                     {formatPrice(total)}
                   </span>
@@ -220,7 +229,7 @@ const CartPage = () => {
                    onMouseEnter={e => e.target.style.background = 'var(--primary-color)'}
                    onMouseLeave={e => e.target.style.background = 'var(--text-main)'}
                  >
-                   Checkout Now <FiArrowRight />
+                   {t('cart.summary.checkout')} <FiArrowRight />
                  </button>
                  <Link 
                    to="/shop" 
@@ -242,14 +251,14 @@ const CartPage = () => {
                    onMouseEnter={e => { e.target.style.background = 'var(--border-color)'; e.target.style.color = 'var(--text-main)'; }}
                    onMouseLeave={e => { e.target.style.background = 'var(--bg-sub)'; e.target.style.color = 'var(--text-muted)'; }}
                  >
-                   Continue Shopping
+                   {t('cart.summary.continue')}
                  </Link>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.25rem', background: 'var(--bg-sub)', borderRadius: '16px', border: '1px solid var(--border-color)' }}>
                  <FiShield style={{ color: 'var(--primary-color)' }} size={20} />
                  <p style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)', lineHeight: 1.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Secure transaction powered by industry standard encryption.
+                    {t('cart.summary.security_note')}
                  </p>
               </div>
             </div>

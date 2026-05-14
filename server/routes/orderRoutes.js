@@ -5,15 +5,21 @@ const {
   getAllOrders, updateOrderStatus, getAnalytics,
   getFinancialReport, getTopProducts, getRevenueChart,
   confirmPayment, getOrderByTracking, getDeliveryOrders,
-  completeDelivery, submitFeedback, getDeliveryPersonnel
+  completeDelivery, submitFeedback, getDeliveryPersonnel,
+  createPOSOrder
 } = require('../controllers/orderController');
 const { protect, optionalAuth } = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const deliveryAuth = require('../middleware/deliveryAuth');
 const storeAuth = require('../middleware/storeAuth');
+const cashierAuth = require('../middleware/cashierAuth');
 
 // Public
 router.post('/', optionalAuth, createOrder);
+
+// POS Route (Cashier/Admin)
+router.post('/pos', protect, cashierAuth, createPOSOrder);
+
 router.get('/track/:trackingNumber', getOrderByTracking);
 
 // Auth required
@@ -25,11 +31,11 @@ router.post('/:id/feedback', optionalAuth, submitFeedback);
 router.get('/delivery/mine', protect, deliveryAuth, getDeliveryOrders);
 router.put('/delivery/complete', protect, deliveryAuth, completeDelivery);
 
-// Admin — Analytics & Finance Reports
-router.get('/analytics/summary', protect, admin, getAnalytics);
-router.get('/reports/financial', protect, admin, getFinancialReport);
-router.get('/reports/top-products', protect, admin, getTopProducts);
-router.get('/reports/revenue-chart', protect, admin, getRevenueChart);
+// Admin & Cashier — Analytics & Finance Reports
+router.get('/analytics/summary', protect, cashierAuth, getAnalytics);
+router.get('/reports/financial', protect, cashierAuth, getFinancialReport);
+router.get('/reports/top-products', protect, cashierAuth, getTopProducts);
+router.get('/reports/revenue-chart', protect, cashierAuth, getRevenueChart);
 // Store Keeper & Admin — Manage Orders & Assignment
 router.get('/store/orders', protect, storeAuth, getAllOrders);
 router.get('/delivery/personnel', protect, storeAuth, getDeliveryPersonnel);

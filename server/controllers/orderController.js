@@ -65,6 +65,12 @@ const createOrder = async (req, res, next) => {
     const shippingPrice = itemsPrice > 5000 ? 0 : 150; // Free shipping over 5000 ETB
     const taxPrice = Math.round(itemsPrice * 0.15 * 100) / 100; // 15% VAT
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
+    
+    // Enforce COD limit
+    if (paymentMethod === 'cash_on_delivery' && totalPrice > 5000) {
+      res.status(400);
+      throw new Error('Cash on Delivery is only available for orders below 5,000 ETB');
+    }
 
     // Ensure street field exists (required by model)
     const sanitizedAddress = {
@@ -219,6 +225,10 @@ const updateOrderStatus = async (req, res, next) => {
 
     // Assign delivery person if provided
     if (req.body.deliveryPerson) {
+      if (req.user.role !== 'store_keeper') {
+        res.status(403);
+        throw new Error('Only Store Keeper can assign delivery personnel');
+      }
       order.deliveryPerson = req.body.deliveryPerson;
     }
 
@@ -323,21 +333,29 @@ const confirmPayment = async (req, res, next) => {
 
     order.isPaid = true;
     order.paidAt = Date.now();
-    order.status = 'confirmed';
+    
+    // Only advance status to 'confirmed' if it's currently at an earlier stage
+    if (['pending', 'processing'].includes(order.status)) {
+      order.status = 'confirmed';
+    }
+
     order.paymentResult = {
       transactionId: req.body.transactionId || `TXN-${Date.now()}`,
       status: 'completed',
       paidAt: Date.now(),
-      phoneNumber: req.body.phoneNumber || ''
+      phoneNumber: req.body.phoneNumber || '',
+      method: order.paymentMethod
     };
+
     order.statusHistory.push({
-      status: 'confirmed',
+      status: order.status,
       timestamp: new Date(),
-      note: `Payment confirmed via ${order.paymentMethod}`
+      note: `Payment confirmed via ${order.paymentMethod}${req.user ? ` by ${req.user.name}` : ''}`,
+      updatedBy: req.user ? req.user._id : null
     });
 
     const updatedOrder = await order.save();
-    console.log('Payment confirmed for order:', updatedOrder._id);
+    console.log('Payment confirmed for order:', updatedOrder._id, 'Status:', updatedOrder.status);
 
     // Notify all admins about payment
     try {
@@ -345,7 +363,7 @@ const confirmPayment = async (req, res, next) => {
       const notifications = admins.map(admin => ({
         recipient: admin._id,
         sender: req.user ? req.user._id : null,
-        type: 'payment_received',
+        type: 'order_status',
         title: 'Payment Received',
         message: `Payment confirmed for Order #${order._id.toString().slice(-6).toUpperCase()}.`,
         relatedId: order._id,
@@ -669,6 +687,89 @@ const getRevenueChart = async (req, res, next) => {
   }
 };
 
+// @desc    Create POS order (Cashier/Admin)
+// @route   POST /api/orders/pos
+const createPOSOrder = async (req, res, next) => {
+  try {
+    const { items, paymentMethod, customerId, discount = 0 } = req.body;
+    
+    if (!items || items.length === 0) {
+      res.status(400);
+      throw new Error('No order items');
+    }
+
+    let itemsPrice = 0;
+    const orderItems = [];
+
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+      if (!product) {
+        res.status(404);
+        throw new Error(`Product not found: ${item.product}`);
+      }
+      if (product.stock < item.quantity) {
+        res.status(400);
+        throw new Error(`Insufficient stock for ${product.name}. Available: ${product.stock}`);
+      }
+
+      orderItems.push({
+        product: product._id,
+        name: product.name,
+        image: (product.images && product.images[0]) || item.image || '',
+        price: product.price,
+        quantity: item.quantity
+      });
+
+      itemsPrice += product.price * item.quantity;
+      product.stock -= item.quantity;
+      await product.save();
+    }
+
+    // Ensure discount isn't larger than itemsPrice
+    const validDiscount = Math.min(Number(discount) || 0, itemsPrice);
+    
+    // Tax is calculated on the discounted subtotal
+    const discountedSubtotal = itemsPrice - validDiscount;
+    const taxPrice = Math.round(discountedSubtotal * 0.15 * 100) / 100;
+    const totalPrice = discountedSubtotal + taxPrice;
+
+    const order = await Order.create({
+      user: customerId || null,
+      cashier: req.user ? req.user._id : null,
+      items: orderItems,
+      shippingAddress: {
+        fullName: 'In-Store Purchase',
+        phone: 'N/A',
+        street: 'Store Location',
+        city: 'Store Location',
+        country: 'Ethiopia'
+      },
+      paymentMethod: paymentMethod || 'cash',
+      itemsPrice,
+      discountPrice: validDiscount,
+      shippingPrice: 0,
+      taxPrice,
+      totalPrice,
+      isPaid: true,
+      paidAt: Date.now(),
+      status: 'delivered',
+      deliveredAt: Date.now()
+    });
+
+    order.statusHistory.push({
+      status: 'delivered',
+      timestamp: Date.now(),
+      note: 'In-store POS purchase',
+      updatedBy: req.user._id
+    });
+    await order.save();
+
+    res.status(201).json(order);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createOrder,
   getMyOrders,
@@ -684,6 +785,7 @@ module.exports = {
   getDeliveryOrders,
   completeDelivery,
   submitFeedback,
-  getDeliveryPersonnel
+  getDeliveryPersonnel,
+  createPOSOrder
 };
 

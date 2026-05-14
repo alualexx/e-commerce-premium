@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiShoppingCart, FiUser, FiSearch, FiMenu, FiX, FiLogOut, FiPackage, FiHeart, FiActivity, FiSun, FiMoon } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
+import { FiShoppingCart, FiUser, FiSearch, FiMenu, FiX, FiLogOut, FiPackage, FiHeart, FiBell, FiSun, FiMoon, FiActivity, FiGlobe } from 'react-icons/fi';
 import useAuthStore from '../../store/useAuthStore';
 import useCartStore from '../../store/useCartStore';
 import useThemeStore from '../../store/useThemeStore';
@@ -12,12 +13,29 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const { user, logout } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
   const totalItems = useCartStore(s => s.totalItems)();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === 'en' ? 'am' : 'en';
+    i18n.changeLanguage(nextLang);
+  };
+
+  useEffect(() => {
+    if (user) {
+      import('../../utils/axios').then(({ default: axiosInstance }) => {
+        axiosInstance.get('/notifications')
+          .then(({ data }) => setUnreadCount(data.unreadCount))
+          .catch(() => {});
+      });
+    }
+  }, [user, location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -40,21 +58,24 @@ const Navbar = () => {
     }
   };
 
+  const isHomePage = location.pathname === '/';
+  const isTransparent = !isScrolled && isHomePage;
+
   const navLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/shop', label: 'Shop' },
-    { to: '/track', label: 'Track Order' },
-    { to: '/about', label: 'About Us' },
-    { to: '/contact', label: 'Contact' },
+    { to: '/', label: t('nav.home', 'Home') },
+    { to: '/shop', label: t('nav.shop', 'Shop') },
+    { to: '/track', label: t('nav.track', 'Track Order') },
+    { to: '/about', label: t('nav.about', 'About') },
+    { to: '/contact', label: t('nav.contact', 'Contact') },
   ];
 
   const navbarStyle = {
     position: 'fixed',
-    top: 0,
+    top: 'var(--banner-height, 0)',
     left: 0,
     right: 0,
     zIndex: 1000,
-    transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+    transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1), top 0.3s ease',
     background: isScrolled ? 'var(--nav-bg)' : 'transparent',
     backdropFilter: isScrolled ? 'blur(20px)' : 'none',
     borderBottom: isScrolled ? '1px solid var(--border-color)' : '1px solid rgba(255, 255, 255, 0.1)',
@@ -64,7 +85,7 @@ const Navbar = () => {
   return (
     <>
       <nav style={navbarStyle}>
-        <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 6%', display: 'flex', alignItems: 'center', justifyContent: 'between' }}>
+        <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 6%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
             {/* Left: Branding */}
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
@@ -80,19 +101,24 @@ const Navbar = () => {
               }}>
                 <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, color: '#fff', fontSize: '1.25rem', fontStyle: 'italic' }}>A</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ 
-                  fontFamily: 'Outfit, sans-serif', 
-                  fontWeight: 900, 
-                  fontSize: '1.125rem', 
-                  color: isScrolled ? '#111' : '#111', // Keeping it dark for visibility
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1
-                }}>
-                  ALEX <span style={{ color: '#3d7a28' }}>RETAIL</span>
-                </span>
-                <span style={{ fontSize: '0.5rem', fontWeight: 800, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#3d7a28', opacity: 0.6, marginTop: '2px' }}>Premium Boutique</span>
-              </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ 
+                    fontFamily: 'Outfit, sans-serif', 
+                    fontWeight: 900, 
+                    fontSize: '1.125rem', 
+                    color: isTransparent ? '#fff' : 'var(--text-main)', 
+                    letterSpacing: '-0.02em',
+                    transition: 'color 0.3s'
+                  }}>Alex <span style={{ color: '#a3e635' }}>Retail</span></span>
+                  <span style={{ 
+                    fontSize: '0.6rem', 
+                    fontWeight: 800, 
+                    color: isTransparent ? 'rgba(255,255,255,0.5)' : 'var(--text-secondary)', 
+                    textTransform: 'uppercase', 
+                    letterSpacing: '0.1em',
+                    transition: 'color 0.3s'
+                  }}>Premium E-commerce</span>
+                </div>
             </Link>
 
             {/* Center: Navigation Links */}
@@ -110,15 +136,17 @@ const Navbar = () => {
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       textDecoration: 'none',
-                      color: isActive ? '#111' : '#6b7280',
+                      color: isActive 
+                        ? (isTransparent ? '#fff' : 'var(--text-main)') 
+                        : (isTransparent ? 'rgba(255,255,255,0.7)' : 'var(--text-secondary)'),
                       position: 'relative',
                       transition: 'all 0.3s'
                     }}
                     onMouseEnter={e => {
-                      if (!isActive) e.currentTarget.style.color = '#111';
+                      if (!isActive) e.currentTarget.style.color = isTransparent ? '#fff' : 'var(--text-main)';
                     }}
                     onMouseLeave={e => {
-                      if (!isActive) e.currentTarget.style.color = '#6b7280';
+                      if (!isActive) e.currentTarget.style.color = isTransparent ? 'rgba(255,255,255,0.7)' : 'var(--text-secondary)';
                     }}
                   >
                     {link.label}
@@ -155,15 +183,44 @@ const Navbar = () => {
                   justifyContent: 'center',
                   background: 'transparent',
                   border: 'none',
-                  color: 'var(--text-main)',
+                  color: isTransparent ? '#fff' : 'var(--text-main)',
                   cursor: 'pointer',
                   transition: 'all 0.2s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'var(--border-color)'}
+                onMouseEnter={e => e.currentTarget.style.background = isTransparent ? 'rgba(255,255,255,0.1)' : 'var(--border-color)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
               >
                 {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
+              </button>
+
+              {/* Language Switcher */}
+              <button
+                onClick={toggleLanguage}
+                style={{
+                  height: '40px',
+                  padding: '0 0.75rem',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  background: 'transparent',
+                  border: 'none',
+                  color: isTransparent ? '#fff' : 'var(--text-main)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  fontFamily: 'Outfit, sans-serif',
+                  fontWeight: 800,
+                  fontSize: '0.75rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = isTransparent ? 'rgba(255,255,255,0.1)' : 'var(--border-color)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                title={i18n.language === 'en' ? 'Switch to Amharic' : 'ወደ እንግሊዝኛ ይቀይሩ'}
+              >
+                <FiGlobe size={18} />
+                <span style={{ minWidth: '24px' }}>{i18n.language === 'en' ? 'EN' : 'አማ'}</span>
               </button>
 
               <button
@@ -177,7 +234,7 @@ const Navbar = () => {
                   justifyContent: 'center',
                   background: 'transparent',
                   border: 'none',
-                  color: 'var(--text-main)',
+                  color: isTransparent ? '#fff' : 'var(--text-main)',
                   cursor: 'pointer',
                   transition: 'all 0.2s'
                 }}
@@ -193,10 +250,10 @@ const Navbar = () => {
                 style={{
                   width: '40px', height: '40px', borderRadius: '12px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'transparent', border: 'none', color: '#6b7280',
+                  background: 'transparent', border: 'none', color: isTransparent ? 'rgba(255,255,255,0.7)' : 'var(--text-secondary)',
                   textDecoration: 'none', transition: 'all 0.2s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+                onMouseEnter={e => e.currentTarget.style.background = isTransparent ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 title="Favorites"
               >
@@ -208,10 +265,10 @@ const Navbar = () => {
                 style={{
                   width: '40px', height: '40px', borderRadius: '12px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'transparent', border: 'none', color: '#6b7280',
+                  background: 'transparent', border: 'none', color: isTransparent ? 'rgba(255,255,255,0.7)' : 'var(--text-secondary)',
                   textDecoration: 'none', transition: 'all 0.2s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+                onMouseEnter={e => e.currentTarget.style.background = isTransparent ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 title="Track Order"
               >
@@ -222,10 +279,10 @@ const Navbar = () => {
                 <Link to="/cart" style={{
                   width: '40px', height: '40px', borderRadius: '12px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'transparent', border: 'none', color: '#6b7280',
+                  background: 'transparent', border: 'none', color: isTransparent ? 'rgba(255,255,255,0.7)' : 'var(--text-secondary)',
                   textDecoration: 'none', transition: 'all 0.2s'
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+                onMouseEnter={e => e.currentTarget.style.background = isTransparent ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 title="Shopping Bag"
                 >
@@ -240,6 +297,28 @@ const Navbar = () => {
                     }}>
                       {totalItems}
                     </span>
+                  )}
+                </Link>
+              </div>
+
+              <div style={{ position: 'relative' }}>
+                <Link to="/notifications" style={{
+                  width: '40px', height: '40px', borderRadius: '12px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'transparent', border: 'none', color: '#6b7280',
+                  textDecoration: 'none', transition: 'all 0.2s'
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,0,0,0.04)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                title="Notifications"
+                >
+                  <FiBell size={18} />
+                  {unreadCount > 0 && (
+                    <span style={{
+                      position: 'absolute', top: '6px', right: '6px',
+                      width: '10px', height: '10px', background: '#3d7a28',
+                      borderRadius: '50%', border: '2px solid #fff'
+                    }} />
                   )}
                 </Link>
               </div>
@@ -310,11 +389,11 @@ const Navbar = () => {
                           <Link to="/profile" className="nav-dropdown-item"><FiUser size={16} /> Edit Profile</Link>
                           <Link to="/settings" className="nav-dropdown-item"><FiActivity size={16} /> Account Settings</Link>
                           
-                          {user.role === 'admin' && (
+                          {(user.role === 'admin' || user.role === 'cashier') && (
                             <>
                               <div style={{ height: '1px', background: 'rgba(0,0,0,0.05)', margin: '0.5rem 0' }} />
-                              <Link to="/admin" className="nav-dropdown-item" style={{ color: '#3d7a28', background: '#f0fce8' }}>
-                                <FiActivity size={16} /> Admin Portal
+                              <Link to={user.role === 'cashier' ? '/admin/pos' : '/admin'} className="nav-dropdown-item" style={{ color: '#3d7a28', background: '#f0fce8' }}>
+                                <FiActivity size={16} /> {user.role === 'admin' ? 'Admin Portal' : 'Finance & POS Portal'}
                               </Link>
                             </>
                           )}
@@ -354,7 +433,7 @@ const Navbar = () => {
                 <Link
                   to="/login"
                   style={{
-                    background: '#111',
+                    background: isTransparent ? 'rgba(255,255,255,0.15)' : '#111',
                     color: '#fff',
                     padding: '0.75rem 1.75rem',
                     borderRadius: '999px',
@@ -367,7 +446,7 @@ const Navbar = () => {
                     boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                   }}
                   onMouseEnter={e => e.currentTarget.style.background = '#3d7a28'}
-                  onMouseLeave={e => e.currentTarget.style.background = '#111'}
+                  onMouseLeave={e => e.currentTarget.style.background = isTransparent ? 'rgba(255,255,255,0.15)' : '#111'}
                 >
                   Login
                 </Link>
@@ -386,7 +465,7 @@ const Navbar = () => {
                     justifyContent: 'center',
                     background: 'transparent',
                     border: 'none',
-                    color: '#111',
+                    color: isTransparent ? '#fff' : 'var(--text-main)',
                     cursor: 'pointer'
                   }}
                 >
@@ -409,7 +488,7 @@ const Navbar = () => {
                 top: '100%',
                 left: 0,
                 right: 0,
-                background: '#fff',
+                background: 'var(--bg-card)',
                 padding: '2rem 6%',
                 borderBottom: '1px solid rgba(0,0,0,0.05)',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.05)'
@@ -489,7 +568,7 @@ const Navbar = () => {
                     fontSize: '2rem',
                     fontFamily: 'Outfit, sans-serif',
                     fontWeight: 800,
-                    color: '#111',
+                    color: 'var(--text-main)',
                     textDecoration: 'none',
                     letterSpacing: '-0.02em'
                   }}
@@ -502,12 +581,21 @@ const Navbar = () => {
             <div style={{ borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '2.5rem' }}>
               <p style={{ fontSize: '0.625rem', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1.5rem' }}>Quick Actions</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <Link to="/wishlist" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: '#111', fontWeight: 700 }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiHeart /></div>
+                <Link to="/wishlist" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: 'var(--text-main)', fontWeight: 700 }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'var(--bg-sub)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiHeart /></div>
                   Wishlist
                 </Link>
-                <Link to="/orders" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: '#111', fontWeight: 700 }}>
-                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiPackage /></div>
+                <Link to="/notifications" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: 'var(--text-main)', fontWeight: 700 }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'var(--bg-sub)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ position: 'relative' }}>
+                      <FiBell />
+                      {unreadCount > 0 && <div style={{ position: 'absolute', top: -2, right: -2, width: 6, height: 6, background: '#a3e635', borderRadius: '50%' }} />}
+                    </div>
+                  </div>
+                  Notifications
+                </Link>
+                <Link to="/orders" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: 'var(--text-main)', fontWeight: 700 }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'var(--bg-sub)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiPackage /></div>
                   Track Orders
                 </Link>
                 {user ? (

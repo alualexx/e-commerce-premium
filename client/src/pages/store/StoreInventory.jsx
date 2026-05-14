@@ -146,7 +146,12 @@ const StoreInventory = () => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                       <img src={product.images[0]} alt="" style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover', background: 'var(--bg-sub)' }} />
                       <div>
-                        <p style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '0.9rem', marginBottom: '4px' }}>{product.name}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                          <p style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '0.9rem' }}>{product.name}</p>
+                          {product.status === 'pending_review' && (
+                            <span style={{ fontSize: '0.6rem', padding: '2px 6px', borderRadius: '4px', background: 'var(--warning-color)', color: 'var(--bg-main)', fontWeight: 900, textTransform: 'uppercase' }}>In Review</span>
+                          )}
+                        </div>
                         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>ID: {product._id.slice(-8).toUpperCase()}</p>
                       </div>
                     </div>
@@ -157,7 +162,11 @@ const StoreInventory = () => {
                     </span>
                   </td>
                   <td style={{ padding: '18px 24px', fontWeight: 800, color: 'var(--text-main)', fontSize: '0.9rem' }}>
-                    {formatPrice(product.price)}
+                    {product.status === 'pending_review' ? (
+                      <span style={{ color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '0.8rem' }}>Pending Admin</span>
+                    ) : (
+                      formatPrice(product.price)
+                    )}
                   </td>
                   <td style={{ padding: '18px 24px' }}>
                     {editingId === product._id ? (

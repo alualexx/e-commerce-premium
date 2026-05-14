@@ -31,6 +31,11 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     default: null
   },
+  cashier: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
   guestEmail: {
     type: String,
     default: ''
@@ -50,7 +55,7 @@ const orderSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['telebirr', 'cbe_birr', 'amole', 'cash_on_delivery'],
+    enum: ['telebirr', 'cbe_birr', 'amole', 'abyssinia', 'chapa', 'cash_on_delivery', 'cash'],
     required: true
   },
   paymentResult: {
@@ -72,6 +77,10 @@ const orderSchema = new mongoose.Schema({
   taxPrice: {
     type: Number,
     required: true,
+    default: 0
+  },
+  discountPrice: {
+    type: Number,
     default: 0
   },
   totalPrice: {

@@ -6,75 +6,10 @@ import {
   FiShield, FiRotateCcw, FiStar, FiChevronRight, FiChevronLeft
 } from 'react-icons/fi';
 import { AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import ProductCard from '../components/product/ProductCard';
+import PromotionBanner from '../components/home/PromotionBanner';
 import axiosInstance from '../utils/api';
-
-/* ─── Static data ────────────────────────────────────────── */
-const TRUST_ITEMS = [
-  { icon: FiTruck,      title: 'Free Express Shipping', desc: 'On all orders over $75'            },
-  { icon: FiShield,     title: 'Purchase Protection',   desc: '100% secure transactions'          },
-  { icon: FiRotateCcw,  title: 'Easy 30-Day Returns',   desc: 'Hassle-free exchange window'       },
-  { icon: FiStar,       title: '4.9 / 5 Rating',        desc: 'Trusted by 12,000+ customers'     },
-];
-
-const HERO_SLIDES = [
-  {
-    subtitle: 'New Arrival | Spring 2026',
-    title: 'Elevate Your Everyday.',
-    description: 'Experience the intersection of luxury and simplicity. Curated pieces for the modern minimalist, delivered with precision.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1800',
-    cta: 'Shop Collection',
-    link: '/shop'
-  },
-  {
-    subtitle: 'Limited Edition | Accessories',
-    title: 'Refined By Detail.',
-    description: 'Discover our artisanal accessory line. Handcrafted excellence designed to complement the discerning professional.',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=1800',
-    cta: 'Explore Accessories',
-    link: '/shop?category=Accessories'
-  },
-  {
-    subtitle: 'Premium | Sustainability',
-    title: 'Conscious Luxury.',
-    description: 'Style that respects the planet. Our eco-certified materials ensure you look good while doing good.',
-    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1800',
-    cta: 'Learn More',
-    link: '/shop?featured=true'
-  }
-];
-
-const CATEGORIES = [
-  {
-    name: 'Clothing',
-    tag: 'Most Popular',
-    items: '120+ Items',
-    img: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&q=80&w=900',
-    accent: '#a3e635',
-    featured: true,
-  },
-  {
-    name: 'Accessories',
-    tag: 'New Arrivals',
-    items: '80+ Items',
-    img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&q=80&w=600',
-    accent: '#f59e0b',
-  },
-  {
-    name: 'Footwear',
-    tag: 'Trending',
-    items: '60+ Items',
-    img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=600',
-    accent: '#3b82f6',
-  },
-  {
-    name: 'Bags',
-    tag: 'Limited',
-    items: '40+ Items',
-    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=80&w=600',
-    accent: '#ec4899',
-  },
-];
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -82,13 +17,246 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
 });
 
+const PromotionSection = () => {
+  const { t } = useTranslation();
+  const [promo, setPromo] = useState(null);
+
+  useEffect(() => {
+    axiosInstance.get('/notifications/latest-promotion')
+      .then(({ data }) => {
+        if (data && data.type === 'promotion') setPromo(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!promo) return null;
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      style={{
+        background: '#fff',
+        borderRadius: '2.5rem',
+        padding: '0',
+        display: 'grid',
+        gridTemplateColumns: '1.2fr 1fr',
+        minHeight: '500px',
+        border: '1px solid var(--border-color)',
+        boxShadow: '0 40px 100px rgba(0,0,0,0.06)',
+        overflow: 'hidden',
+        position: 'relative'
+      }}
+      className="promotion-box"
+    >
+      {/* Content Side */}
+      <div style={{ 
+        padding: '5rem',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        gap: '2.5rem',
+        zIndex: 2
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span style={{ 
+            background: '#111', color: '#fff', 
+            padding: '0.5rem 1rem', borderRadius: '100px', 
+            fontSize: '0.75rem', fontWeight: 900, textTransform: 'uppercase', 
+            letterSpacing: '0.2em'
+          }}>
+            {t('home.promotion.exclusive')}
+          </span>
+          <div style={{ width: '40px', height: '1px', background: 'rgba(0,0,0,0.1)' }} />
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>
+            {t('home.promotion.limited')}
+          </span>
+        </div>
+
+        <div>
+          <h2 style={{ 
+            fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', 
+            fontWeight: 900, color: '#111', letterSpacing: '-0.05em', 
+            lineHeight: 0.95, marginBottom: '1.5rem' 
+          }}>
+            {promo.title}
+          </h2>
+          <p style={{ 
+            color: 'var(--text-secondary)', fontSize: '1.25rem', 
+            maxWidth: '35ch', lineHeight: 1.5, fontWeight: 500
+          }}>
+            {promo.message}
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          <Link 
+            to={promo.link || '/shop'} 
+            style={{ 
+              display: 'inline-flex', alignItems: 'center', gap: '1rem', 
+              background: '#111', color: '#fff', padding: '1.5rem 3rem', 
+              borderRadius: '100px', fontWeight: 800, fontSize: '1.1rem',
+              textDecoration: 'none', transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.15)'
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)'; e.currentTarget.style.background = '#222'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.background = '#111'; }}
+          >
+            {t('home.promotion.shop_now')} <FiArrowRight size={22} />
+          </Link>
+          
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#a3e635', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{t('home.promotion.ending')}</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#111' }}>{t('home.promotion.pricing')}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Visual Side */}
+      <div style={{ 
+        position: 'relative', 
+        background: '#f9fafb',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden'
+      }}>
+        <div style={{ position: 'absolute', width: '140%', height: '140%', background: 'radial-gradient(circle at center, #a3e63515 0%, transparent 70%)', top: '-20%', left: '-20%' }} />
+        
+        <motion.div
+          animate={{ y: [0, -15, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          style={{ zIndex: 2, position: 'relative' }}
+        >
+          <div style={{ 
+            width: '320px', height: '420px', background: '#fff', 
+            borderRadius: '2rem', boxShadow: '0 50px 100px rgba(0,0,0,0.08)',
+          }}>
+            <div style={{ height: '72%', background: 'linear-gradient(135deg, var(--bg-sub) 0%, var(--bg-card) 100%)', borderRadius: '1.75rem 1.75rem 0 0' }} />
+            <div style={{ padding: '0.75rem 1rem' }}>
+              <div style={{ height: '12px', width: '60%', background: 'var(--bg-sub)', borderRadius: '4px', marginBottom: '8px' }} />
+              <div style={{ height: '12px', width: '40%', background: 'var(--bg-sub)', borderRadius: '4px' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+                 <span style={{ fontWeight: 900, fontSize: '1.1rem' }}>79 ETB</span>
+                 <span style={{ color: '#a3e635', fontWeight: 900, fontSize: '0.75rem' }}>{t('home.promotion.active')}</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Floating Badge */}
+        <motion.div
+          initial={{ rotate: 15 }}
+          animate={{ rotate: -5 }}
+          transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+          style={{
+            position: 'absolute',
+            top: '20%',
+            right: '15%',
+            width: '120px',
+            height: '120px',
+            background: '#a3e635',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            zIndex: 3,
+            boxShadow: '0 20px 40px rgba(163, 230, 53, 0.4)'
+          }}
+        >
+          <span style={{ fontSize: '1.75rem', fontWeight: 900, color: '#111', lineHeight: 1 }}>SALE</span>
+          <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#111', textTransform: 'uppercase' }}>{t('home.promotion.live')}</span>
+        </motion.div>
+      </div>
+
+      <style>{`
+        @media (max-width: 1024px) {
+          .promotion-box {
+            grid-template-columns: 1fr !important;
+          }
+          .promotion-box > div:first-child {
+            padding: 3rem !important;
+          }
+          .promotion-box > div:last-child {
+            height: 400px !important;
+          }
+        }
+      `}</style>
+    </motion.div>
+  );
+};
+
 /* ─── Component ─────────────────────────────────────────── */
 const HomePage = () => {
+  const { t } = useTranslation();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const [activeSlide, setActiveSlide] = useState(0);
+
+  const HERO_SLIDES = [
+    {
+      subtitle: t('home.hero.slides.0.subtitle'),
+      title: t('home.hero.slides.0.title'),
+      description: t('home.hero.slides.0.description'),
+      cta: t('home.hero.slides.0.cta'),
+      image: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1920',
+      link: '/shop',
+    },
+    {
+      subtitle: t('home.hero.slides.1.subtitle'),
+      title: t('home.hero.slides.1.title'),
+      description: t('home.hero.slides.1.description'),
+      cta: t('home.hero.slides.1.cta'),
+      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=1920',
+      link: '/shop',
+    },
+  ];
+
+  const TRUST_ITEMS = [
+    { icon: FiTruck,     title: t('home.trust.shipping.title'), desc: t('home.trust.shipping.desc') },
+    { icon: FiShield,    title: t('home.trust.secure.title'),   desc: t('home.trust.secure.desc') },
+    { icon: FiStar,      title: t('home.trust.support.title'),  desc: t('home.trust.support.desc') },
+    { icon: FiRotateCcw, title: t('home.trust.returns.title'),  desc: t('home.trust.returns.desc') },
+  ];
+
+  const CATEGORIES = [
+    {
+      name: 'Clothing',
+      items: '120+ items',
+      accent: '#a3e635',
+      img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800',
+      tag: t('home.categories.tags.featured'),
+      featured: true,
+    },
+    {
+      name: 'Accessories',
+      items: '48 items',
+      accent: '#f59e0b',
+      img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800',
+      tag: t('home.categories.tags.new'),
+      featured: false,
+    },
+    {
+      name: 'Footwear',
+      items: '64 items',
+      accent: '#60a5fa',
+      img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800',
+      tag: t('home.categories.tags.sale'),
+      featured: false,
+    },
+    {
+      name: 'Home & Living',
+      items: '35 items',
+      accent: '#f472b6',
+      img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=800',
+      tag: t('home.categories.tags.new'),
+      featured: false,
+    },
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -98,7 +266,7 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    axiosInstance.get('/products?featured=true&limit=4')
+    axiosInstance.get('/products?fromShop=true&featured=true&limit=4')
       .then(({ data }) => setFeaturedProducts(data.products || []))
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -106,6 +274,7 @@ const HomePage = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 0, background: 'var(--bg-main)' }}>
+      <PromotionBanner />
 
       {/* ════════════════════════════════════════
           HERO CAROUSEL
@@ -271,7 +440,7 @@ const HomePage = () => {
           fontSize: '0.7rem', fontWeight: 900, color: 'rgba(255,255,255,0.2)',
           textTransform: 'uppercase', letterSpacing: '0.5em', whiteSpace: 'nowrap', zIndex: 15
         }}>
-          ESTABLISHED MMXXVI — ALEX RETAIL
+          {t('home.hero.branding')}
         </div>
       </section>
 
@@ -318,8 +487,8 @@ const HomePage = () => {
         <motion.div {...fadeUp(0.05)} style={{ marginBottom: '3rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <p style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--primary-color)', marginBottom: '0.6rem' }}>Explore</p>
-              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.03em', lineHeight: 1.05, margin: 0 }}>Shop by Category</h2>
+              <p style={{ fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--primary-color)', marginBottom: '0.6rem' }}>{t('home.categories.explore')}</p>
+              <h2 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.03em', lineHeight: 1.05, margin: 0 }}>{t('home.categories.title')}</h2>
             </div>
             <Link
               to="/shop"
@@ -327,7 +496,7 @@ const HomePage = () => {
               onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
-              View All <FiArrowRight size={14} />
+              {t('common.view_all')} <FiArrowRight size={14} />
             </Link>
           </div>
         </motion.div>
@@ -395,9 +564,10 @@ const HomePage = () => {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   <button
                     className="cat-btn"
+                    onClick={(e) => { e.stopPropagation(); navigate(`/shop?category=${cat.name}`); }}
                     style={{ padding: '0.7rem 1.5rem', borderRadius: '9999px', border: '1.5px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.15)', color: '#fff', backdropFilter: 'blur(10px)', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer', transition: 'all 0.3s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                   >
-                    Shop Now <FiArrowRight size={14} />
+                    {t('common.shop_now')} <FiArrowRight size={14} />
                   </button>
                 </div>
               </div>
@@ -436,9 +606,10 @@ const HomePage = () => {
                 </div>
                 <div
                   className="cat-arrow"
-                  style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0, transition: 'all 0.3s' }}
+                  onClick={(e) => { e.stopPropagation(); navigate(`/shop?category=${cat.name}`); }}
+                  style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', transition: 'all 0.3s' }}
                 >
-                  <FiArrowRight size={16} />
+                  <FiArrowRight size={20} />
                 </div>
               </div>
             </motion.div>
@@ -464,6 +635,13 @@ const HomePage = () => {
       </section>
 
       {/* ════════════════════════════════════════
+          LIVE PROMOTIONS / NEWS RELEASE
+      ════════════════════════════════════════ */}
+      <section style={{ padding: '4rem 6% 0', background: 'var(--bg-main)' }}>
+        <PromotionSection />
+      </section>
+
+      {/* ════════════════════════════════════════
           FEATURED PRODUCTS
       ════════════════════════════════════════ */}
       <section style={{ padding: '0 6% 6rem', background: 'var(--bg-main)' }}>
@@ -476,7 +654,7 @@ const HomePage = () => {
               fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.25em',
               textTransform: 'uppercase', color: 'var(--primary-color)', marginBottom: '0.75rem',
             }}>
-              Handpicked
+              {t('home.featured.subtitle')}
             </p>
             <h2 style={{
               fontFamily: 'Outfit, sans-serif',
@@ -484,7 +662,7 @@ const HomePage = () => {
               fontWeight: 800, color: 'var(--text-main)',
               letterSpacing: '-0.03em', lineHeight: 1.05,
             }}>
-              Featured Collection
+              {t('home.featured.title')}
             </h2>
           </div>
           <Link
@@ -497,7 +675,7 @@ const HomePage = () => {
             onMouseEnter={e => e.currentTarget.style.color = 'var(--text-main)'}
             onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
           >
-            View All <FiArrowRight size={15} />
+            {t('common.view_all')} <FiArrowRight size={15} />
           </Link>
         </motion.div>
 
@@ -526,10 +704,10 @@ const HomePage = () => {
                   border: '1px dashed var(--border-color)',
                 }}>
                   <FiShoppingBag size={36} style={{ color: 'var(--text-muted)' }} />
-                  <p style={{ color: 'var(--text-muted)', fontWeight: 500 }}>No featured products yet.</p>
+                  <p style={{ color: 'var(--text-muted)', fontWeight: 500 }}>{t('home.featured.empty')}</p>
                   <Link to="/shop" style={{
                     color: 'var(--primary-color)', fontWeight: 700, fontSize: '0.875rem', textDecoration: 'none',
-                  }}>Browse all products →</Link>
+                  }}>{t('home.featured.browse')} →</Link>
                 </div>
               )
           }
@@ -557,7 +735,7 @@ const HomePage = () => {
             fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.3em',
             textTransform: 'uppercase', color: '#a3e635',
           }}>
-            Our Story
+            {t('home.story.subtitle')}
           </p>
           <h2 style={{
             fontFamily: 'Outfit, sans-serif',
@@ -565,18 +743,16 @@ const HomePage = () => {
             fontWeight: 800, color: '#fff',
             lineHeight: 1.1, letterSpacing: '-0.02em',
           }}>
-            Conscious Style.<br />
+            {t('home.story.title')}<br />
             <span style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 300, fontStyle: 'italic' }}>
-              Simply Delivered.
+              {t('home.story.title_italic')}
             </span>
           </h2>
           <p style={{
             color: 'rgba(255,255,255,0.55)', lineHeight: 1.8,
             fontSize: '1rem', maxWidth: '36ch',
           }}>
-            ALEX RETAIL was founded on the belief that great design
-            and ethical sourcing can coexist. Every piece in our
-            collection is curated with intention — for you and the planet.
+            {t('home.story.description')}
           </p>
           <Link
             to="/shop"
@@ -591,7 +767,7 @@ const HomePage = () => {
             onMouseEnter={e => { e.currentTarget.style.background = '#fff'; }}
             onMouseLeave={e => { e.currentTarget.style.background = '#a3e635'; }}
           >
-            Explore the Mission <FiArrowRight size={15} />
+            {t('home.story.cta')} <FiArrowRight size={15} />
           </Link>
         </div>
 
@@ -621,7 +797,7 @@ const HomePage = () => {
             fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.3em',
             textTransform: 'uppercase', color: 'var(--primary-color)', marginBottom: '1rem',
           }}>
-            Stay in the loop
+            {t('home.newsletter.subtitle')}
           </p>
           <h2 style={{
             fontFamily: 'Outfit, sans-serif',
@@ -629,19 +805,21 @@ const HomePage = () => {
             fontWeight: 800, color: 'var(--text-main)',
             letterSpacing: '-0.03em', marginBottom: '1rem',
           }}>
-            Join the Inner Circle
+            {t('home.newsletter.title')}
           </h2>
           <p style={{
             color: 'var(--text-muted)', fontSize: '1rem',
             maxWidth: '44ch', margin: '0 auto 2.5rem',
             lineHeight: 1.7,
           }}>
-            Early access to drops, member-only pricing, and curated style guides —
-            straight to your inbox.
+            {t('home.newsletter.description')}
           </p>
 
           <form
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => {
+              e.preventDefault();
+              alert(t('footer.newsletter.success') || 'Thank you for subscribing!');
+            }}
             style={{
               display: 'flex', gap: '0.75rem',
               maxWidth: '28rem', margin: '0 auto',
@@ -650,7 +828,8 @@ const HomePage = () => {
           >
             <input
               type="email"
-              placeholder="your@email.com"
+              placeholder={t('home.newsletter.placeholder')}
+              required
               style={{
                 flex: 1, minWidth: '200px',
                 padding: '0.875rem 1.25rem', borderRadius: '9999px',
@@ -671,14 +850,14 @@ const HomePage = () => {
                 border: 'none', cursor: 'pointer',
                 transition: 'background 0.2s',
               }}
-              onMouseEnter={e => e.currentTarget.style.background = '#2d5a3d'}
-              onMouseLeave={e => e.currentTarget.style.background = '#1a3626'}
+              onMouseEnter={e => e.currentTarget.style.background = 'var(--primary-color)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'var(--text-main)'}
             >
-              Subscribe
+              {t('home.newsletter.button')}
             </button>
           </form>
           <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-            No spam, ever. Unsubscribe anytime.
+            {t('home.newsletter.spam_note')}
           </p>
         </motion.div>
       </section>

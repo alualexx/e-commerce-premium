@@ -8,6 +8,7 @@ import LoadingScreen from './components/common/LoadingScreen';
 // Layout
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 // Pages - Lazy Loaded
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -27,6 +28,7 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Admin - Lazy Loaded
@@ -36,6 +38,9 @@ const ManageProductsPage = lazy(() => import('./pages/admin/ManageProductsPage')
 const ManageOrdersPage = lazy(() => import('./pages/admin/ManageOrdersPage'));
 const ManageUsersPage = lazy(() => import('./pages/admin/ManageUsersPage'));
 const FinancePage = lazy(() => import('./pages/admin/FinancePage'));
+const DeliveryTrackingPage = lazy(() => import('./pages/admin/DeliveryTrackingPage'));
+const AdminSettingsPage = lazy(() => import('./pages/admin/AdminSettingsPage'));
+const POSPage = lazy(() => import('./pages/admin/POSPage'));
 
 // Delivery Portal - Lazy Loaded
 const DeliveryLayout = lazy(() => import('./pages/delivery/DeliveryLayout'));
@@ -60,7 +65,12 @@ const ScrollToTop = () => {
 const PublicLayout = ({ children }) => (
   <>
     <Navbar />
-    <main className="min-h-screen">{children}</main>
+    <main 
+      className="min-h-screen" 
+      style={{ paddingTop: 'var(--banner-height, 0)' }}
+    >
+      {children}
+    </main>
     <Footer />
   </>
 );
@@ -101,15 +111,16 @@ function App() {
           <Route path="/shop" element={<PublicLayout><ShopPage /></PublicLayout>} />
           <Route path="/product/:slug" element={<PublicLayout><ProductDetailPage /></PublicLayout>} />
           <Route path="/cart" element={<PublicLayout><CartPage /></PublicLayout>} />
-          <Route path="/checkout" element={<PublicLayout><CheckoutPage /></PublicLayout>} />
-          <Route path="/orders" element={<PublicLayout><OrdersPage /></PublicLayout>} />
-          <Route path="/order/:id" element={<PublicLayout><OrderDetailPage /></PublicLayout>} />
+          <Route path="/checkout" element={<ProtectedRoute><PublicLayout><CheckoutPage /></PublicLayout></ProtectedRoute>} />
+          <Route path="/orders" element={<ProtectedRoute><PublicLayout><OrdersPage /></PublicLayout></ProtectedRoute>} />
+          <Route path="/order/:id" element={<ProtectedRoute><PublicLayout><OrderDetailPage /></PublicLayout></ProtectedRoute>} />
           <Route path="/track" element={<PublicLayout><TrackOrderPage /></PublicLayout>} />
-          <Route path="/wishlist" element={<PublicLayout><WishlistPage /></PublicLayout>} />
+          <Route path="/wishlist" element={<ProtectedRoute><PublicLayout><WishlistPage /></PublicLayout></ProtectedRoute>} />
           <Route path="/about" element={<PublicLayout><AboutPage /></PublicLayout>} />
           <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
-          <Route path="/profile" element={<PublicLayout><ProfilePage /></PublicLayout>} />
-          <Route path="/settings" element={<PublicLayout><SettingsPage /></PublicLayout>} />
+          <Route path="/profile" element={<ProtectedRoute><PublicLayout><ProfilePage /></PublicLayout></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><PublicLayout><SettingsPage /></PublicLayout></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><PublicLayout><NotificationsPage /></PublicLayout></ProtectedRoute>} />
           <Route path="/payment/success" element={<PublicLayout><PaymentSuccessPage /></PublicLayout>} />
           <Route path="/payment/process" element={<PaymentProcessPage />} />
 
@@ -126,10 +137,13 @@ function App() {
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<DashboardPage />} />
+            <Route path="pos" element={<POSPage />} />
             <Route path="products" element={<ManageProductsPage />} />
             <Route path="orders" element={<ManageOrdersPage />} />
             <Route path="users" element={<ManageUsersPage />} />
             <Route path="finance" element={<FinancePage />} />
+            <Route path="tracking" element={<DeliveryTrackingPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
           </Route>
 
           {/* Store Keeper Portal */}

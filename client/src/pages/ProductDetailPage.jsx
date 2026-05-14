@@ -47,6 +47,7 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+  const [activeAccordion, setActiveAccordion] = useState(null);
 
   const addItem = useCartStore(s => s.addItem);
   const { user, toggleWishlist } = useAuthStore();
@@ -247,10 +248,13 @@ const ProductDetailPage = () => {
               </button>
             </div>
 
-            {/* Trust badges */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', marginBottom: '2.5rem' }}>
               {[
-                { icon: <FiTruck size={16} />, label: 'Free Shipping', sub: 'Worldwide' },
+                { 
+                  icon: <FiTruck size={16} />, 
+                  label: product.shippingPrice > 0 ? formatPrice(product.shippingPrice) : 'Free Shipping', 
+                  sub: product.shippingPrice > 0 ? 'Shipping Cost' : 'Worldwide' 
+                },
                 { icon: <FiShield size={16} />, label: 'Secure Pay', sub: '100% Guaranteed' },
                 { icon: <FiRotateCcw size={16} />, label: 'Easy Returns', sub: '30 Day Window' },
               ].map(({ icon, label, sub }) => (
@@ -264,15 +268,43 @@ const ProductDetailPage = () => {
               ))}
             </div>
 
-            {/* Accordion rows */}
             <div style={{ borderTop: '1px solid var(--border-color)' }}>
-              {['Composition & Care', 'Shipping & Returns'].map(item => (
-                <div key={item} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.1rem 0', borderBottom: '1px solid var(--border-color)', cursor: 'pointer' }}
-                  onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
-                  onMouseLeave={e => e.currentTarget.style.opacity = '1'}
-                >
-                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: 'Outfit, sans-serif' }}>{item}</span>
-                  <FiChevronRight size={16} style={{ color: 'var(--text-muted)' }} />
+              {[
+                { id: 'composition', title: 'Composition & Care', content: product.composition },
+                { id: 'shipping', title: 'Shipping & Returns', content: product.returnPolicy }
+              ].map(item => (
+                <div key={item.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                  <div 
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.1rem 0', cursor: 'pointer' }}
+                    onClick={() => setActiveAccordion(activeAccordion === item.id ? null : item.id)}
+                    onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
+                    onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                  >
+                    <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.06em', fontFamily: 'Outfit, sans-serif' }}>{item.title}</span>
+                    <FiChevronRight 
+                      size={16} 
+                      style={{ 
+                        color: 'var(--text-muted)', 
+                        transform: activeAccordion === item.id ? 'rotate(90deg)' : 'none',
+                        transition: 'transform 0.3s ease'
+                      }} 
+                    />
+                  </div>
+                  <AnimatePresence>
+                    {activeAccordion === item.id && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <p style={{ paddingBottom: '1.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6, fontFamily: 'Inter, sans-serif' }}>
+                          {item.content}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>

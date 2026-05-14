@@ -5,11 +5,13 @@ import {
   FiUserPlus, FiFilter, FiCheckCircle, FiXCircle 
 } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import api from '../../utils/api';
 import { formatDate } from '../../utils/formatters';
 import LoadingScreen from '../../components/common/LoadingScreen';
 
 const ManageUsersPage = () => {
+  const { t } = useTranslation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,7 +35,7 @@ const ManageUsersPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to permanently delete this user?')) {
+    if (window.confirm(t('admin.users.table.delete_confirm'))) {
       try {
         await api.delete(`/users/${id}`);
         fetchUsers();
@@ -77,8 +79,8 @@ const ManageUsersPage = () => {
       {/* Header Section */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-           <p style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Management</p>
-           <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>Customers & Staff</h1>
+           <p style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--primary-color)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>{t('admin.users.header.subtitle')}</p>
+           <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>{t('admin.users.header.title')}</h1>
         </div>
         <button style={{ 
           display: 'flex', alignItems: 'center', gap: '0.75rem', 
@@ -88,7 +90,7 @@ const ManageUsersPage = () => {
           cursor: 'pointer', boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
         }}>
           <FiUserPlus size={18} />
-          Add New User
+          {t('admin.users.header.add')}
         </button>
       </div>
 
@@ -98,7 +100,7 @@ const ManageUsersPage = () => {
            <FiSearch style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={18} />
            <input
              type="text"
-             placeholder="Search by name, email or ID..."
+             placeholder={t('admin.users.filters.search')}
              style={{ 
                width: '100%', 
                padding: '1.1rem 1.25rem 1.1rem 3.75rem', 
@@ -134,7 +136,7 @@ const ManageUsersPage = () => {
                 transition: 'all 0.2s'
               }}
             >
-              {role}
+              {t(`admin.users.filters.${role}`)}
             </button>
           ))}
         </div>
@@ -145,7 +147,7 @@ const ManageUsersPage = () => {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: 'var(--bg-sub)', borderBottom: '1px solid var(--border-color)' }}>
-              {['User', 'Status', 'Role', 'Joined', 'Actions'].map((h, i) => (
+              {['user', 'status', 'role', 'joined', 'actions'].map((h) => (
                 <th key={h} style={{ 
                   textAlign: 'left', 
                   padding: '1.5rem 2rem', 
@@ -154,7 +156,7 @@ const ManageUsersPage = () => {
                   color: 'var(--text-muted)', 
                   textTransform: 'uppercase', 
                   letterSpacing: '0.15em' 
-                }}>{h}</th>
+                }}>{t(`admin.users.table.${h}`)}</th>
               ))}
             </tr>
           </thead>
@@ -187,30 +189,23 @@ const ManageUsersPage = () => {
                     </div>
                   </td>
                   <td style={{ padding: '1.5rem 2rem' }}>
-                    <button 
-                      onClick={() => toggleStatus(user)}
-                      style={{ 
-                        display: 'flex', alignItems: 'center', gap: '0.5rem', 
-                        padding: '0.5rem 1rem', borderRadius: '10px', 
-                        background: user.isActive ? 'var(--bg-sub)' : 'var(--bg-danger-light)',
-                        color: user.isActive ? 'var(--success-color)' : 'var(--danger-color)',
-                        border: 'none', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 800,
-                        textTransform: 'uppercase'
-                      }}
-                    >
-                      {user.isActive ? <FiCheckCircle /> : <FiXCircle />}
-                      {user.isActive ? 'Active' : 'Suspended'}
-                    </button>
+                    {user.isActive ? (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--success-color)', fontSize: '0.75rem', fontWeight: 800, background: 'rgba(16, 185, 129, 0.05)', padding: '0.4rem 0.8rem', borderRadius: '10px' }}>
+                         <FiCheckCircle size={14} /> {t('admin.users.table.active')}
+                      </span>
+                    ) : (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--danger-color)', fontSize: '0.75rem', fontWeight: 800, background: 'rgba(239, 68, 68, 0.05)', padding: '0.4rem 0.8rem', borderRadius: '10px' }}>
+                         <FiXCircle size={14} /> {t('admin.users.table.suspended')}
+                      </span>
+                    )}
                   </td>
                   <td style={{ padding: '1.5rem 2rem' }}>
                     <span style={{ 
-                      fontSize: '0.7rem', fontWeight: 800, color: user.role === 'admin' ? 'var(--text-main)' : 'var(--text-muted)', 
-                      textTransform: 'uppercase', letterSpacing: '0.05em',
-                      background: user.role === 'admin' ? 'var(--bg-sub)' : 'transparent',
-                      padding: user.role === 'admin' ? '0.4rem 0.75rem' : '0',
-                      borderRadius: '8px'
+                      fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', 
+                      letterSpacing: '0.05em', color: user.role === 'admin' ? 'var(--primary-color)' : 'var(--text-muted)',
+                      background: 'var(--bg-sub)', padding: '0.4rem 0.8rem', borderRadius: '8px', border: '1px solid var(--border-color)'
                     }}>
-                      {user.role}
+                      {t(`admin.users.filters.${user.role}`)}
                     </span>
                   </td>
                   <td style={{ padding: '1.5rem 2rem', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)' }}>
@@ -218,9 +213,9 @@ const ManageUsersPage = () => {
                   </td>
                   <td style={{ padding: '1.5rem 2rem' }}>
                     <div style={{ display: 'flex', gap: '0.75rem' }}>
-                      <button 
+                       <button 
                         onClick={() => toggleAdmin(user)}
-                        title={user.role === 'admin' ? 'Demote to Customer' : 'Promote to Admin'}
+                        title={user.role === 'admin' ? t('admin.users.table.demote') : t('admin.users.table.promote')}
                         style={{ 
                           width: '40px', height: '40px', borderRadius: '10px', 
                           border: '1px solid var(--border-color)', background: 'var(--bg-card)', 
@@ -232,7 +227,7 @@ const ManageUsersPage = () => {
                       </button>
                       <button 
                         onClick={() => handleDelete(user._id)}
-                        title="Delete User"
+                        title={t('admin.users.table.delete')}
                         style={{ 
                           width: '40px', height: '40px', borderRadius: '10px', 
                           border: 'none', background: 'var(--bg-danger-light)', 
@@ -252,26 +247,26 @@ const ManageUsersPage = () => {
 
         {filteredUsers.length === 0 && !loading && (
           <div style={{ textAlign: 'center', padding: '6rem 2rem' }}>
-             <p style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>No users found matching your criteria</p>
+             <p style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>{t('admin.users.table.empty')}</p>
           </div>
         )}
       </div>
 
       {/* Summary Footer */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 2rem', background: 'var(--bg-sub)', borderRadius: '24px', border: '1px solid var(--border-color)' }}>
-         <div style={{ display: 'flex', gap: '2rem' }}>
+          <div style={{ display: 'flex', gap: '2rem' }}>
             <div>
-               <p style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Active Customers</p>
+               <p style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>{t('admin.users.footer.active_customers')}</p>
                <p style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)' }}>{users.filter(u => u.role === 'customer' && u.isActive).length}</p>
             </div>
             <div style={{ width: '1px', background: 'var(--border-color)' }} />
             <div>
-               <p style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Staff Accounts</p>
+               <p style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>{t('admin.users.footer.staff_accounts')}</p>
                <p style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)' }}>{users.filter(u => u.role === 'admin').length}</p>
             </div>
          </div>
          <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-color)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-           <FiShield /> Identity data encrypted and secured
+           <FiShield /> {t('admin.users.footer.security_note')}
          </p>
       </div>
     </div>

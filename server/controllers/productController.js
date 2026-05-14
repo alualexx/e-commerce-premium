@@ -12,15 +12,26 @@ const getProducts = async (req, res, next) => {
     const skip = (page - 1) * limit;
 
     // Build filter
-    const filter = { status: 'published' }; // Default only published
+    const filter = { status: 'published' };
+    const isStaff = req.user && (req.user.role === 'admin' || req.user.role === 'store_keeper');
+    const isFromShop = req.query.fromShop === 'true';
 
-    // If admin/store_keeper, allow seeing all statuses via query
-    if (req.user && (req.user.role === 'admin' || req.user.role === 'store_keeper')) {
+    // If coming from shop, strictly only show published with price
+    if (isFromShop) {
+      filter.status = 'published';
+      filter.price = { $gt: 0 };
+    } 
+    // Otherwise, if staff and not in shop, allow seeing all statuses
+    else if (isStaff) {
       if (req.query.status) {
         filter.status = req.query.status;
       } else {
         delete filter.status; // Staff sees everything by default
       }
+    } 
+    // Public user not in shop (shouldn't happen often but for safety)
+    else {
+      filter.price = { $gt: 0 };
     }
 
     if (req.query.category) {
@@ -165,15 +176,39 @@ const createProduct = async (req, res, next) => {
 // @route   PUT /api/products/:id
 const updateProduct = async (req, res, next) => {
   try {
+    const { broadcastPromotion, ...updateData } = req.body;
+    
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 
     if (!product) {
       res.status(404);
       throw new Error('Product not found');
+    }
+
+    // Handle broadcast if requested
+    if (broadcastPromotion) {
+      const discountPercent = product.compareAtPrice > product.price 
+        ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
+        : 0;
+
+      // Create ONE global notification for the Home Page Spotlight
+      await Notification.create({
+        sender: req.user._id,
+        type: 'promotion',
+        title: discountPercent > 0 ? `${discountPercent}% OFF: ${product.name}` : `New Release: ${product.name}`,
+        message: discountPercent > 0 
+          ? `Exclusive Deal! Get the new ${product.name} at a massive ${discountPercent}% discount. Limited time offer.`
+          : `The new ${product.name} is now available in our store. Check it out!`,
+        relatedId: product._id,
+        link: `/product/${product.slug}`
+      });
+
+      // Optional: Still notify users individually for their bell icons if desired
+      // But for performance, we now rely on the Home Page spotlight for marketing
     }
 
     res.json(product);

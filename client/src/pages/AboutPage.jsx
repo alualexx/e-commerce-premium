@@ -13,14 +13,14 @@ const AboutPage = () => {
     <div style={{ background: 'var(--bg-main)', color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif' }}>
       {/* Hero Section */}
       <section style={{ 
-        height: '60vh', 
+        minHeight: '60vh', 
         background: 'var(--bg-card)', 
         display: 'flex', 
         flexDirection: 'column', 
         justifyContent: 'center', 
         alignItems: 'center',
         textAlign: 'center',
-        padding: '0 6%'
+        padding: '100px 6% 0'
       }}>
         <motion.span 
           initial={{ opacity: 0, y: 20 }}

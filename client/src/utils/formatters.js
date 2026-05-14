@@ -1,4 +1,7 @@
 export const formatPrice = (price) => {
+  if (price === undefined || price === null || isNaN(price)) {
+    return 'ETB 0';
+  }
   return new Intl.NumberFormat('en-ET', {
     style: 'currency',
     currency: 'ETB',

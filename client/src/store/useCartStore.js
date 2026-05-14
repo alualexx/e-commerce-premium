@@ -1,7 +1,17 @@
 import { create } from 'zustand';
 
 const useCartStore = create((set, get) => ({
-  items: JSON.parse(localStorage.getItem('cart')) || [],
+  items: (() => { 
+    try { 
+      const data = localStorage.getItem('cart-storage'); 
+      if (!data) return [];
+      const parsed = JSON.parse(data);
+      return parsed?.state?.items || [];
+    } catch (e) { 
+      console.error('Error parsing cart from localStorage:', e);
+      return []; 
+    } 
+  })(),
 
   // Computed selectors — call as functions: store.totalPrice()
   totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
@@ -36,13 +46,14 @@ const useCartStore = create((set, get) => ({
           _id: product._id,
           name: product.name,
           price: product.price,
+          shippingPrice: product.shippingPrice || 0,
           image: product.images?.[0] || '',
           stock: product.stock,
           slug: product.slug,
           quantity: Math.min(quantity, product.stock),
         }];
       }
-      localStorage.setItem('cart', JSON.stringify(newItems));
+      localStorage.setItem('cart-storage', JSON.stringify({ state: { items: newItems } }));
       return { items: newItems };
     });
   },
@@ -50,7 +61,7 @@ const useCartStore = create((set, get) => ({
   removeItem: (productId) => {
     set(state => {
       const newItems = state.items.filter(item => item._id !== productId);
-      localStorage.setItem('cart', JSON.stringify(newItems));
+      localStorage.setItem('cart-storage', JSON.stringify({ state: { items: newItems } }));
       return { items: newItems };
     });
   },
@@ -62,13 +73,13 @@ const useCartStore = create((set, get) => ({
           ? { ...item, quantity: Math.max(1, Math.min(quantity, item.stock)) }
           : item
       );
-      localStorage.setItem('cart', JSON.stringify(newItems));
+      localStorage.setItem('cart-storage', JSON.stringify({ state: { items: newItems } }));
       return { items: newItems };
     });
   },
 
   clearCart: () => {
-    localStorage.removeItem('cart');
+    localStorage.removeItem('cart-storage');
     set({ items: [] });
   },
 }));

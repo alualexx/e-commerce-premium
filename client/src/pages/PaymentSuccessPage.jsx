@@ -34,9 +34,10 @@ const PaymentSuccessPage = () => {
     fetchOrder();
   }, [orderId]);
 
-  // Auto-open print dialog once receipt is ready
+  // Auto-open print dialog once receipt is ready (Only if paid or not COD)
   useEffect(() => {
-    if (printReady && order) {
+    const isUnpaidCOD = order?.paymentMethod === 'cash_on_delivery' && !order?.isPaid;
+    if (printReady && order && !isUnpaidCOD) {
       window.print();
     }
   }, [printReady, order]);
@@ -96,101 +97,128 @@ const PaymentSuccessPage = () => {
           </div>
 
           {order ? (
-            <>
-              {/* Billing & Order Info */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.6rem', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1rem' }}>Billed To</div>
-                  <p style={{ fontSize: '0.95rem', fontWeight: 800, marginBottom: '0.5rem' }}>{order.shippingAddress.fullName}</p>
-                  <p style={{ fontSize: '0.8rem', color: '#6b7280', lineHeight: 1.7 }}>
-                    {order.shippingAddress.street || order.shippingAddress.address}<br />
-                    {order.shippingAddress.city}, Ethiopia<br />
-                    {order.shippingAddress.phone}
+            order.paymentMethod === 'cash_on_delivery' && !order.isPaid ? (
+              <div style={{ padding: '6rem 2rem', textAlign: 'center' }}>
+                <div style={{ 
+                  width: '80px', 
+                  height: '80px', 
+                  background: '#fff7ed', 
+                  borderRadius: '50%', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  margin: '0 auto 2rem',
+                  border: '2px solid #ffedd5'
+                }}>
+                  <FiPackage size={40} color="#f97316" />
+                </div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '1rem', color: '#111' }}>Invoice Pending</h2>
+                <p style={{ color: '#6b7280', fontWeight: 500, lineHeight: 1.6, maxWidth: '400px', margin: '0 auto' }}>
+                  Since you've selected <strong>Cash on Delivery</strong>, your official invoice will be generated and sent to you once the payment is collected and confirmed by our delivery personnel.
+                </p>
+                <div style={{ marginTop: '2rem', padding: '1rem', background: '#f9fafb', borderRadius: '16px', display: 'inline-block' }}>
+                  <p style={{ margin: 0, fontSize: '0.875rem', fontWeight: 700, color: '#374151' }}>
+                    Order Total: {formatPrice(order.totalPrice)}
                   </p>
                 </div>
-                <div>
-                  <div style={{ fontSize: '0.6rem', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1rem' }}>Order Details</div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              </div>
+            ) : (
+              <>
+                {/* Billing & Order Info */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginBottom: '3rem' }}>
+                  <div>
+                    <div style={{ fontSize: '0.6rem', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1rem' }}>Billed To</div>
+                    <p style={{ fontSize: '0.95rem', fontWeight: 800, marginBottom: '0.5rem' }}>{order.shippingAddress.fullName}</p>
+                    <p style={{ fontSize: '0.8rem', color: '#6b7280', lineHeight: 1.7 }}>
+                      {order.shippingAddress.street || order.shippingAddress.address}<br />
+                      {order.shippingAddress.city}, Ethiopia<br />
+                      {order.shippingAddress.phone}
+                    </p>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.6rem', fontWeight: 800, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '1rem' }}>Order Details</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                      {[
+                        ['Date', formatDate(order.createdAt || new Date())],
+                        ['Payment', order.paymentMethod.replace('_', ' ').toUpperCase()],
+                        ['Status', order.isPaid ? 'PAID' : 'PENDING'],
+                        ['Tracking', order.trackingNumber || '—'],
+                      ].map(([label, value]) => (
+                        <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
+                          <span style={{ color: '#9ca3af', fontWeight: 600 }}>{label}</span>
+                          <span style={{ fontWeight: 800, color: label === 'Status' && !order.isPaid ? '#6b7280' : label === 'Status' ? '#3d7a28' : label === 'Tracking' ? '#6366f1' : '#111', fontFamily: label === 'Tracking' ? 'monospace' : 'inherit', letterSpacing: label === 'Tracking' ? '1px' : 'normal' }}>{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tracking Number Banner */}
+                {order.trackingNumber && (
+                  <div style={{
+                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                    borderRadius: '16px', padding: '20px 24px', marginBottom: '2rem',
+                    color: 'white', display: 'flex', justifyContent: 'space-between',
+                    alignItems: 'center', flexWrap: 'wrap', gap: '12px'
+                  }}>
+                    <div>
+                      <p style={{ fontSize: '0.65rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>
+                        Your Tracking Number
+                      </p>
+                      <p style={{ fontSize: '1.4rem', fontFamily: 'monospace', fontWeight: '700', letterSpacing: '3px' }}>
+                        {order.trackingNumber}
+                      </p>
+                    </div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.8, maxWidth: '240px', lineHeight: 1.5 }}>
+                      📦 Share this number with the delivery person when receiving your order
+                    </div>
+                  </div>
+                )}
+
+                {/* Items Table */}
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '3rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #111' }}>
+                      {['Item', 'Qty', 'Price', 'Total'].map((h, i) => (
+                        <th key={h} style={{ padding: '0.75rem 0', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', textAlign: i === 0 ? 'left' : i === 1 ? 'center' : 'right' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(order.orderItems || order.items || []).map((item, i, arr) => (
+                      <tr key={i} style={{ borderBottom: i < arr.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
+                        <td style={{ padding: '1.25rem 0' }}>
+                          <p style={{ fontSize: '0.875rem', fontWeight: 800, margin: 0 }}>{item.name}</p>
+                          <p style={{ fontSize: '0.7rem', color: '#9ca3af', margin: '0.2rem 0 0' }}>Premium Collection</p>
+                        </td>
+                        <td style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: 700 }}>{item.quantity}</td>
+                        <td style={{ textAlign: 'right', fontSize: '0.875rem', fontWeight: 700 }}>{formatPrice(item.price)}</td>
+                        <td style={{ textAlign: 'right', fontSize: '0.875rem', fontWeight: 900 }}>{formatPrice(item.price * item.quantity)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {/* Totals */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <div style={{ width: '280px' }}>
                     {[
-                      ['Date', formatDate(order.createdAt || new Date())],
-                      ['Payment', order.paymentMethod.replace('_', ' ').toUpperCase()],
-                      ['Status', order.isPaid ? 'PAID' : 'PENDING'],
-                      ['Tracking', order.trackingNumber || '—'],
+                      ['Subtotal', formatPrice(order.itemsPrice)],
+                      ['Shipping', order.shippingPrice === 0 ? 'Free' : formatPrice(order.shippingPrice)],
                     ].map(([label, value]) => (
-                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem' }}>
+                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', fontSize: '0.8rem' }}>
                         <span style={{ color: '#9ca3af', fontWeight: 600 }}>{label}</span>
-                        <span style={{ fontWeight: 800, color: label === 'Status' && !order.isPaid ? '#6b7280' : label === 'Status' ? '#3d7a28' : label === 'Tracking' ? '#6366f1' : '#111', fontFamily: label === 'Tracking' ? 'monospace' : 'inherit', letterSpacing: label === 'Tracking' ? '1px' : 'normal' }}>{value}</span>
+                        <span style={{ fontWeight: 800 }}>{value}</span>
                       </div>
                     ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Tracking Number Banner */}
-              {order.trackingNumber && (
-                <div style={{
-                  background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                  borderRadius: '16px', padding: '20px 24px', marginBottom: '2rem',
-                  color: 'white', display: 'flex', justifyContent: 'space-between',
-                  alignItems: 'center', flexWrap: 'wrap', gap: '12px'
-                }}>
-                  <div>
-                    <p style={{ fontSize: '0.65rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '4px' }}>
-                      Your Tracking Number
-                    </p>
-                    <p style={{ fontSize: '1.4rem', fontFamily: 'monospace', fontWeight: '700', letterSpacing: '3px' }}>
-                      {order.trackingNumber}
-                    </p>
-                  </div>
-                  <div style={{ fontSize: '0.75rem', opacity: 0.8, maxWidth: '240px', lineHeight: 1.5 }}>
-                    📦 Share this number with the delivery person when receiving your order
-                  </div>
-                </div>
-              )}
-
-              {/* Items Table */}
-              <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '3rem' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid #111' }}>
-                    {['Item', 'Qty', 'Price', 'Total'].map((h, i) => (
-                      <th key={h} style={{ padding: '0.75rem 0', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', textAlign: i === 0 ? 'left' : i === 1 ? 'center' : 'right' }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {(order.orderItems || order.items || []).map((item, i, arr) => (
-                    <tr key={i} style={{ borderBottom: i < arr.length - 1 ? '1px solid #f3f4f6' : 'none' }}>
-                      <td style={{ padding: '1.25rem 0' }}>
-                        <p style={{ fontSize: '0.875rem', fontWeight: 800, margin: 0 }}>{item.name}</p>
-                        <p style={{ fontSize: '0.7rem', color: '#9ca3af', margin: '0.2rem 0 0' }}>Premium Collection</p>
-                      </td>
-                      <td style={{ textAlign: 'center', fontSize: '0.875rem', fontWeight: 700 }}>{item.quantity}</td>
-                      <td style={{ textAlign: 'right', fontSize: '0.875rem', fontWeight: 700 }}>{formatPrice(item.price)}</td>
-                      <td style={{ textAlign: 'right', fontSize: '0.875rem', fontWeight: 900 }}>{formatPrice(item.price * item.quantity)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Totals */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <div style={{ width: '280px' }}>
-                  {[
-                    ['Subtotal', formatPrice(order.itemsPrice)],
-                    ['Shipping', order.shippingPrice === 0 ? 'Free' : formatPrice(order.shippingPrice)],
-                  ].map(([label, value]) => (
-                    <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.6rem 0', fontSize: '0.8rem' }}>
-                      <span style={{ color: '#9ca3af', fontWeight: 600 }}>{label}</span>
-                      <span style={{ fontWeight: 800 }}>{value}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1.25rem 0', borderTop: '2px solid #111', marginTop: '0.5rem' }}>
+                      <span style={{ fontSize: '1rem', fontWeight: 900 }}>Total</span>
+                      <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#3d7a28' }}>{formatPrice(order.totalPrice)}</span>
                     </div>
-                  ))}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1.25rem 0', borderTop: '2px solid #111', marginTop: '0.5rem' }}>
-                    <span style={{ fontSize: '1rem', fontWeight: 900 }}>Total</span>
-                    <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#3d7a28' }}>{formatPrice(order.totalPrice)}</span>
                   </div>
                 </div>
-              </div>
-            </>
+              </>
+            )
           ) : (
             <div style={{ padding: '4rem', textAlign: 'center', color: '#9ca3af' }}>
               <p style={{ fontWeight: 700 }}>Receipt details could not be loaded.</p>
@@ -245,7 +273,9 @@ const PaymentSuccessPage = () => {
               Order Confirmed!
             </h1>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontWeight: 500, lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              Your receipt has been generated. We're preparing your order for delivery.
+              {order?.paymentMethod === 'cash_on_delivery' && !order?.isPaid 
+                ? "Your order has been received and is being processed for delivery."
+                : "Your receipt has been generated. We're preparing your order for delivery."}
             </p>
 
             {orderId && (
@@ -292,37 +322,39 @@ const PaymentSuccessPage = () => {
           </motion.button>
 
           {/* Secondary CTA: Print Receipt */}
-          <motion.button
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            onClick={handlePrint}
-            disabled={!order}
-            style={{
-              width: '100%',
-              height: '56px',
-              background: 'var(--bg-card)',
-              color: 'var(--text-main)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '20px',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              cursor: order ? 'pointer' : 'not-allowed',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.75rem',
-              opacity: order ? 1 : 0.5,
-              transition: 'background 0.2s ease'
-            }}
-            onMouseEnter={e => { if (order) e.currentTarget.style.background = 'var(--bg-sub)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'var(--bg-card)'; }}
-          >
-            <FiPrinter size={18} />
-            Print / Save Receipt
-          </motion.button>
+          {!(order?.paymentMethod === 'cash_on_delivery' && !order?.isPaid) && (
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              onClick={handlePrint}
+              disabled={!order}
+              style={{
+                width: '100%',
+                height: '56px',
+                background: 'var(--bg-card)',
+                color: 'var(--text-main)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '20px',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                cursor: order ? 'pointer' : 'not-allowed',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.75rem',
+                opacity: order ? 1 : 0.5,
+                transition: 'background 0.2s ease'
+              }}
+              onMouseEnter={e => { if (order) e.currentTarget.style.background = 'var(--bg-sub)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--bg-card)'; }}
+            >
+              <FiPrinter size={18} />
+              Print / Save Receipt
+            </motion.button>
+          )}
 
           {/* Tertiary: Continue Shopping */}
           <motion.button

@@ -199,10 +199,17 @@ const DeliveryCompletePage = () => {
                 <span style={{ color: 'var(--text-main)', fontWeight: '700' }}>{result.shippingAddress?.street}, {result.shippingAddress?.city}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
-                <FiDollarSign size={18} color="var(--text-muted)" />
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: '600' }}>VALUE:</span>
-                <span style={{ color: 'var(--text-main)', fontWeight: '800', fontSize: '1.2rem' }}>{result.totalPrice?.toLocaleString()} ETB</span>
+                <FiDollarSign size={18} color={result.isPaid ? 'var(--success-color)' : 'var(--text-muted)'} />
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: '600' }}>PAYMENT:</span>
+                <span style={{ color: result.isPaid ? 'var(--success-color)' : 'var(--text-main)', fontWeight: '800', fontSize: '1.1rem' }}>
+                  {result.totalPrice?.toLocaleString()} ETB {result.isPaid && '(PAID)'}
+                </span>
               </div>
+              {result.paymentMethod === 'cash_on_delivery' && result.isPaid && (
+                <p style={{ fontSize: '0.75rem', color: 'var(--success-color)', fontWeight: '700', marginTop: '-8px', marginLeft: '30px' }}>
+                  ✓ Cash collected and confirmed
+                </p>
+              )}
             </div>
           </motion.div>
         )}

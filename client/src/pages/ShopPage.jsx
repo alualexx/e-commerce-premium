@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiFilter, FiSearch, FiX, FiChevronDown, FiArrowRight } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 import ProductCard from '../components/product/ProductCard';
 import axiosInstance from '../utils/axios';
 
@@ -12,9 +13,10 @@ const ShopPage = () => {
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(true); // Default to showing on desktop
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const currentCategory = searchParams.get('category') || '';
-  const currentSort = searchParams.get('sort') || '-createdAt';
+  const currentSort = searchParams.get('sort') || 'newest';
   const currentSearch = searchParams.get('search') || '';
 
   useEffect(() => {
@@ -22,7 +24,7 @@ const ShopPage = () => {
       setLoading(true);
       try {
         const [prodRes, catRes] = await Promise.all([
-          axiosInstance.get(`/products?${searchParams.toString()}`),
+          axiosInstance.get(`/products?fromShop=true&${searchParams.toString()}`),
           axiosInstance.get('/products/categories/list'),
         ]);
         setProducts(prodRes.data.products || []);
@@ -61,15 +63,15 @@ const ShopPage = () => {
         {/* Header Section */}
         <div style={{ marginBottom: '4rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--text-muted)', marginBottom: '1rem' }}>
-            <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = 'var(--primary-color)'} onMouseLeave={e => e.target.style.color = 'var(--text-muted)'} onClick={() => navigate('/')}>Home</span>
+            <span style={{ cursor: 'pointer', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = 'var(--primary-color)'} onMouseLeave={e => e.target.style.color = 'var(--text-muted)'} onClick={() => navigate('/')}>{t('common.home')}</span>
             <span>/</span>
-            <span style={{ color: 'var(--text-main)' }}>Catalog</span>
+            <span style={{ color: 'var(--text-main)' }}>{t('shop.catalog')}</span>
           </div>
           <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.04em', lineHeight: 1 }}>
-            {currentCategory || 'The Collection'}
+            {currentCategory || t('shop.title_default')}
           </h1>
           <p style={{ color: 'var(--text-secondary)', marginTop: '1rem', fontSize: '1rem', maxWidth: '600px' }}>
-            Explore our curated selection of premium minimalist essentials, designed for the modern individual who values quality and simplicity.
+            {t('shop.description')}
           </p>
         </div>
 
@@ -105,11 +107,11 @@ const ShopPage = () => {
                 transition: 'all 0.2s'
               }}
             >
-              <FiFilter size={16} /> Filters
+              <FiFilter size={16} /> {t('shop.filters')}
             </button>
             <div style={{ width: '1px', height: '24px', background: 'var(--border-color)' }} />
             <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>
-              {products.length} Units Available
+              {products.length} {t('shop.units_available')}
             </span>
           </div>
 
@@ -118,7 +120,7 @@ const ShopPage = () => {
               <FiSearch style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={14} />
               <input 
                 type="text" 
-                placeholder="Search collection..." 
+                placeholder={t('shop.search_placeholder')}
                 style={{
                   width: '100%',
                   height: '48px',
@@ -156,17 +158,17 @@ const ShopPage = () => {
                   outline: 'none'
                 }}
               >
-                <option value="-createdAt">Newest First</option>
-                <option value="price">Price: Low to High</option>
-                <option value="-price">Price: High to Low</option>
-                <option value="-rating">Highest Rated</option>
+                <option value="newest">{t('shop.sort.newest')}</option>
+                <option value="price_asc">{t('shop.sort.price_asc')}</option>
+                <option value="price_desc">{t('shop.sort.price_desc')}</option>
+                <option value="rating">{t('shop.sort.rating')}</option>
               </select>
               <FiChevronDown style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--text-muted)' }} size={14} />
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '4rem', flexDirection: 'column', lg: 'row' }} className="shop-layout">
+        <div className="shop-layout" style={{ display: 'flex', gap: '4rem' }}>
           {/* Sidebar */}
           <AnimatePresence>
             {showFilters && (
@@ -174,18 +176,18 @@ const ShopPage = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                style={{ width: '100%', lg: '280px', flexShrink: 0 }}
+                style={{ flexShrink: 0 }}
                 className="shop-sidebar"
               >
                 <div style={{ marginBottom: '3rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h3 style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-main)' }}>Categories</h3>
+                    <h3 style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-main)' }}>{t('shop.categories')}</h3>
                     {(currentCategory || currentSearch) && (
                       <button 
                         onClick={clearFilters} 
                         style={{ background: 'none', border: 'none', color: 'var(--danger-color)', fontSize: '0.625rem', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
                       >
-                        <FiX size={12} /> Clear
+                        <FiX size={12} /> {t('shop.clear')}
                       </button>
                     )}
                   </div>
@@ -207,7 +209,7 @@ const ShopPage = () => {
                       onMouseEnter={e => { if(!currentCategory) return; e.target.style.background = 'var(--bg-sub)'; }}
                       onMouseLeave={e => { if(!currentCategory) return; e.target.style.background = 'transparent'; }}
                     >
-                      All Collections
+                      {t('shop.all_collections')}
                     </button>
                     {categories.map(cat => (
                       <button
@@ -244,9 +246,9 @@ const ShopPage = () => {
                   overflow: 'hidden'
                 }}>
                   <div style={{ position: 'relative', zIndex: 1 }}>
-                    <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.75rem', fontFamily: 'Outfit, sans-serif' }}>Join the Circle</h4>
+                    <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.75rem', fontFamily: 'Outfit, sans-serif' }}>{t('shop.promo.title')}</h4>
                     <p style={{ fontSize: '0.8125rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                      Get early access to exclusive drops and premium member-only pricing.
+                      {t('shop.promo.description')}
                     </p>
                     <button style={{ 
                       background: 'var(--primary-color)', 
@@ -261,7 +263,7 @@ const ShopPage = () => {
                       alignItems: 'center',
                       gap: '0.5rem'
                     }}>
-                      Join Now <FiArrowRight size={14} />
+                      {t('shop.promo.button')} <FiArrowRight size={14} />
                     </button>
                   </div>
                   {/* Subtle pattern */}
@@ -309,9 +311,9 @@ const ShopPage = () => {
                 <div style={{ width: '64px', height: '64px', background: 'var(--bg-sub)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
                   <FiSearch size={28} />
                 </div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>No results found</h3>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>{t('shop.empty.title')}</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', maxWidth: '300px' }}>
-                  We couldn't find any products matching your current filters. Try a different search or clear your filters.
+                  {t('shop.empty.description')}
                 </p>
                 <button 
                   onClick={clearFilters} 
@@ -327,7 +329,7 @@ const ShopPage = () => {
                     cursor: 'pointer' 
                   }}
                 >
-                  Reset All Filters
+                  {t('shop.empty.button')}
                 </button>
               </div>
             )}
@@ -339,6 +341,14 @@ const ShopPage = () => {
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
+        }
+        @media (max-width: 1023px) {
+          .shop-layout {
+            flex-direction: column !important;
+          }
+          .shop-sidebar {
+            width: 100% !important;
+          }
         }
         @media (min-width: 1024px) {
           .shop-layout {

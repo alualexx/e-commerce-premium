@@ -79,12 +79,20 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try { 
       const user = await login(data.email, data.password); 
-      if (user.role === 'admin') {
+      
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirect = searchParams.get('redirect');
+      
+      if (redirect) {
+        navigate(`/${redirect}`);
+      } else if (user.role === 'admin') {
         navigate('/admin');
       } else if (user.role === 'store_keeper') {
         navigate('/store');
       } else if (user.role === 'delivery') {
         navigate('/delivery');
+      } else if (user.role === 'cashier') {
+        navigate('/admin/pos');
       } else {
         navigate('/');
       }
@@ -158,7 +166,7 @@ const LoginPage = () => {
               letterSpacing: '0.25em', textTransform: 'uppercase',
               fontFamily: 'Outfit, sans-serif',
             }}>
-              Aurora Earth
+              Alex Retail
             </span>
           </div>
 
@@ -298,7 +306,7 @@ const LoginPage = () => {
               fontSize: '1.5rem', fontFamily: 'Outfit, sans-serif',
               fontWeight: 800, color: '#1a3626', letterSpacing: '0.2em',
             }}>
-              AURORA <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#888' }}>EARTH</span>
+              ALEX <span style={{ fontWeight: 300, fontStyle: 'italic', color: '#888' }}>RETAIL</span>
             </span>
           </div>
 

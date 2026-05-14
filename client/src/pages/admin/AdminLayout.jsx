@@ -1,9 +1,10 @@
 import { useState, useEffect, Suspense } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiLayout, FiBox, FiShoppingBag, FiUsers, FiSettings, 
-  FiLogOut, FiMenu, FiX, FiBell, FiSearch, FiActivity, FiChevronRight, FiMoon, FiSun, FiDollarSign 
+  FiLogOut, FiMenu, FiX, FiBell, FiSearch, FiActivity, FiChevronRight, FiMoon, FiSun, FiDollarSign, FiMapPin 
 } from 'react-icons/fi';
 import useAuthStore from '../../store/useAuthStore';
 import useThemeStore from '../../store/useThemeStore';
@@ -11,6 +12,7 @@ import api from '../../utils/api';
 
 
 const AdminLayout = () => {
+  const { t } = useTranslation();
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -18,7 +20,7 @@ const AdminLayout = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user, logout, loading, isHydrated } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
 
   const fetchNotifications = async () => {
@@ -57,21 +59,31 @@ const AdminLayout = () => {
     }
   };
 
-  // Redirect if not admin
+  // Redirect if not admin or cashier, but wait for hydration
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
-      navigate('/');
+    if (isHydrated && (!user || (user.role !== 'admin' && user.role !== 'cashier'))) {
+      navigate('/login');
     }
-  }, [user, navigate]);
+  }, [user, navigate, isHydrated]);
+
+  if (!isHydrated || (loading && !user)) {
+    return (
+      <div style={{ height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)' }}>
+        <FiActivity className="animate-spin" size={48} color="var(--primary-color)" />
+      </div>
+    );
+  }
 
   const menuItems = [
-    { path: '/admin', icon: FiLayout, label: 'Overview' },
-    { path: '/admin/products', icon: FiBox, label: 'Inventory' },
-    { path: '/admin/orders', icon: FiShoppingBag, label: 'Orders' },
-    { path: '/admin/users', icon: FiUsers, label: 'Customers' },
-    { path: '/admin/finance', icon: FiDollarSign, label: 'Finance' },
-    { path: '/admin/settings', icon: FiSettings, label: 'Settings' },
-  ];
+    { path: '/admin', icon: FiLayout, label: t('admin.nav.overview'), roles: ['admin', 'cashier'] },
+    { path: '/admin/pos', icon: FiShoppingBag, label: 'POS Portal', roles: ['admin', 'cashier'] },
+    { path: '/admin/products', icon: FiBox, label: t('admin.nav.inventory'), roles: ['admin'] },
+    { path: '/admin/orders', icon: FiShoppingBag, label: t('admin.nav.orders'), roles: ['admin'] },
+    { path: '/admin/users', icon: FiUsers, label: t('admin.nav.customers'), roles: ['admin'] },
+    { path: '/admin/tracking', icon: FiMapPin, label: t('admin.nav.tracking'), roles: ['admin'] },
+    { path: '/admin/finance', icon: FiDollarSign, label: t('admin.nav.finance'), roles: ['admin', 'cashier'] },
+    { path: '/admin/settings', icon: FiSettings, label: t('admin.nav.settings'), roles: ['admin'] },
+  ].filter(item => item.roles.includes(user?.role));
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-main)', display: 'flex' }}>
@@ -98,7 +110,7 @@ const AdminLayout = () => {
           <Link to="/admin" style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none' }}>
             <div style={{ width: '40px', height: '40px', background: 'var(--text-main)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--bg-main)', fontSize: '1.25rem', fontWeight: 900, fontFamily: 'Outfit, sans-serif' }}>A</div>
             {isSidebarOpen && (
-              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em' }}>Alex <span style={{ color: 'var(--primary-color)' }}>Studio</span></span>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em' }}>Alex <span style={{ color: 'var(--primary-color)' }}>Retail</span></span>
             )}
           </Link>
         </div>
@@ -160,7 +172,7 @@ const AdminLayout = () => {
               <div style={{ width: '52px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                  <FiLogOut size={18} />
               </div>
-              {isSidebarOpen && <span style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Logout</span>}
+              {isSidebarOpen && <span style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('admin.nav.logout')}</span>}
            </button>
            
            <button 
@@ -203,7 +215,7 @@ const AdminLayout = () => {
           padding: '0 3rem', 
           display: 'flex', 
           alignItems: 'center', 
-          justifyContent: 'between',
+          justifyContent: 'space-between',
           position: 'sticky',
           top: 0,
           zIndex: 40

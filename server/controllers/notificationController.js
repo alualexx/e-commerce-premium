@@ -8,7 +8,10 @@ const getNotifications = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .limit(20);
     
-    const unreadCount = await Notification.countDocuments({ recipient: req.user._id, read: false });
+    const unreadCount = await Notification.countDocuments({ 
+      recipient: req.user._id, 
+      read: false 
+    });
 
     res.json({ notifications, unreadCount });
   } catch (error) {
@@ -45,8 +48,23 @@ const markAllRead = async (req, res, next) => {
   }
 };
 
+// @desc    Get latest global promotion (public)
+// @route   GET /api/notifications/latest-promotion
+const getLatestPromotion = async (req, res, next) => {
+  try {
+    // Find the single most recent notification of type 'promotion'
+    const promotion = await Notification.findOne({ type: 'promotion' })
+      .sort({ createdAt: -1 });
+    
+    res.json(promotion);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getNotifications,
   markAsRead,
-  markAllRead
+  markAllRead,
+  getLatestPromotion
 };

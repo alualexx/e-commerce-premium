@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiUser, FiMail, FiShield, FiAlertCircle, FiSave, FiCheckCircle } from 'react-icons/fi';
 import useAuthStore from '../store/useAuthStore';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import axiosInstance from '../utils/api';
 
 const ProfilePage = () => {
+  const { t } = useTranslation();
   const { user, loadUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,11 +30,11 @@ const ProfilePage = () => {
     try {
       await axiosInstance.put('/users/profile', formData);
       await loadUser();
-      toast.success('Profile updated successfully', {
+      toast.success(t('profile.messages.success'), {
         style: { background: 'var(--text-main)', color: 'var(--bg-main)', borderRadius: '12px', fontWeight: 700 }
       });
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to update profile');
+      toast.error(err.response?.data?.message || t('profile.messages.error'));
     } finally {
       setLoading(false);
     }
@@ -76,37 +78,37 @@ const ProfilePage = () => {
         }}
       >
         <div style={{ marginBottom: '3rem' }}>
-          <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>Edit Profile</h1>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 500 }}>Manage your personal information and how it appears on the platform.</p>
+          <h1 style={{ fontFamily: 'Outfit, sans-serif', fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>{t('profile.title')}</h1>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 500 }}>{t('profile.description')}</p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <label style={labelStyle}>Full Name</label>
+              <label style={labelStyle}>{t('profile.labels.name')}</label>
               <div style={{ position: 'relative' }}>
                 <FiUser style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={16} />
                 <input 
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   style={inputStyle} 
-                  placeholder="Your name" 
+                  placeholder={t('profile.placeholders.name')} 
                 />
               </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <label style={labelStyle}>Email Address</label>
+              <label style={labelStyle}>{t('profile.labels.email')}</label>
               <div style={{ position: 'relative' }}>
                 <FiMail style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} size={16} />
                 <input 
                   value={formData.email}
                   disabled
                   style={{ ...inputStyle, opacity: 0.6, cursor: 'not-allowed' }} 
-                  placeholder="email@example.com" 
+                  placeholder={t('profile.placeholders.email')} 
                 />
               </div>
-              <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '0.5rem', paddingLeft: '0.5rem' }}>Email cannot be changed for security reasons.</p>
+              <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '0.5rem', paddingLeft: '0.5rem' }}>{t('profile.email_note')}</p>
             </div>
           </div>
 
@@ -115,7 +117,7 @@ const ProfilePage = () => {
                 <FiShield size={20} />
              </div>
              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500, lineHeight: 1.5 }}>
-                Your data is protected by industry-standard encryption. We never share your personal information with third parties without your explicit consent.
+                {t('profile.privacy_note')}
              </p>
           </div>
 
@@ -144,7 +146,7 @@ const ProfilePage = () => {
             onMouseEnter={e => e.currentTarget.style.background = 'var(--primary-color)'}
             onMouseLeave={e => e.currentTarget.style.background = 'var(--text-main)'}
           >
-            {loading ? <div className="spinner" /> : <><FiSave size={18} /> Save Changes</>}
+            {loading ? <div className="spinner" /> : <><FiSave size={18} /> {t('profile.button.save')}</>}
           </button>
         </form>
       </motion.div>
